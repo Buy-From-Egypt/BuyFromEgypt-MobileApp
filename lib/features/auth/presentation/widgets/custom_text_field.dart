@@ -1,6 +1,7 @@
 import 'package:buy_from_egypt/core/utils/app_colors.dart';
 import 'package:buy_from_egypt/core/utils/styles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:solar_icons/solar_icons.dart';
 
 class CustomTextField extends StatefulWidget {
@@ -38,7 +39,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         children: [
           const SizedBox(width: 24),
           if (widget.imagePath != null)
-            Image.asset(widget.imagePath!, width: 24, height: 24)
+            SvgPicture.asset(widget.imagePath!, width: 24, height: 24)
           else if (widget.icon != null)
             Icon(widget.icon, size: 24, color: AppColors.primary),
           const SizedBox(width: 16),

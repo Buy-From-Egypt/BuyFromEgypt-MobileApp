@@ -3,6 +3,7 @@ import 'package:buy_from_egypt/core/utils/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
+
 class SplashView extends StatefulWidget {
   const SplashView({super.key});
 

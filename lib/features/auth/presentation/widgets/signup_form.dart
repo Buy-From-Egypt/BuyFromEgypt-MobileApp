@@ -39,7 +39,7 @@ class SignUpForm extends StatelessWidget {
               const SizedBox(height: 16),
               const LabeledTextField(
                 label: 'Email Address',
-                imagePath: 'assets/images/Messages.png',
+                imagePath: 'assets/images/Message.svg',
                 hintText: 'example@gmail.com',
               ),
               const SizedBox(height: 16),

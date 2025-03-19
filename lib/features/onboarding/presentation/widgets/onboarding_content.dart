@@ -1,6 +1,7 @@
 
 import 'package:buy_from_egypt/core/utils/styles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class OnboardingContent extends StatelessWidget {
   final String title, description, image;
@@ -39,7 +40,7 @@ class OnboardingContent extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 64),
-          Image.asset(image, height: 300),
+          SvgPicture.asset(image, height: 300),
         ],
       ),
     );

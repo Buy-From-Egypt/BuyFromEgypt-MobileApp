@@ -19,19 +19,19 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       "title": "Connect, Trade, and Grow",
       "description":
           "Your gateway to seamless global trade and professional networking. Discover trusted partners, list products, and manage your business—all in one place.",
-      "image": "assets/images/undraw_connecting-teams_nnjy 1.png",
+      "image": "assets/images/undraw_connecting-teams_nnjy 1.svg",
     },
     {
       "title": "Let's Tailor Your Journey",
       "description":
           "Choose your role, industry, and preferences to unlock a personalized experience and maximize your success.",
-      "image": "assets/images/undraw_advanced-customization_7ms4.png",
+      "image": "assets/images/undraw_advanced-customization_7ms4.svg",
     },
     {
       "title": "Discover Trusted Suppliers",
       "description":
           "No more guesswork! Access a global marketplace of verified suppliers, negotiate the best deals, and import with confidence.",
-      "image": "assets/images/undraw_map_cuix 1.png",
+      "image": "assets/images/undraw_map_cuix 1.svg",
     }
   ];
 
