@@ -16,8 +16,8 @@ class _CustomTabBarState extends State<CustomTabBar> {
   Widget build(BuildContext context) {
     return Center(
       child: SizedBox(
-        width: 327, 
-        height: 56, 
+        width: 327,
+        height: 56,
         child: Stack(
           alignment: Alignment.center,
           children: [
@@ -35,12 +35,7 @@ class _CustomTabBarState extends State<CustomTabBar> {
                   ? Alignment.centerLeft
                   : Alignment.centerRight,
               child: Padding(
-                padding: EdgeInsets.only(
-                  top: 4,
-                  bottom: 4,
-                  left: isSignUpSelected ? 0 : 4,
-                  right: isSignUpSelected ? 4 : 0,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
                 child: Container(
                   width: 156,
                   height: 48,
@@ -58,13 +53,14 @@ class _CustomTabBarState extends State<CustomTabBar> {
                 // Sign Up Button
                 GestureDetector(
                   onTap: () => setState(() => isSignUpSelected = true),
-                  child: const SizedBox(
+                  child: SizedBox(
                     width: 160,
                     height: 48,
                     child: Center(
                       child: Text(
                         "Sign Up",
-                        style: Styles.textStyle16,
+                        style: Styles.textStyle16
+                            .copyWith(fontWeight: FontWeight.w600),
                       ),
                     ),
                   ),
@@ -72,13 +68,14 @@ class _CustomTabBarState extends State<CustomTabBar> {
                 // Login Button
                 GestureDetector(
                   onTap: () => setState(() => isSignUpSelected = false),
-                  child: const SizedBox(
+                  child: SizedBox(
                     width: 160,
                     height: 48,
                     child: Center(
                       child: Text(
                         "Login",
-                        style: Styles.textStyle16,
+                        style: Styles.textStyle16
+                            .copyWith(fontWeight: FontWeight.w600),
                       ),
                     ),
                   ),
