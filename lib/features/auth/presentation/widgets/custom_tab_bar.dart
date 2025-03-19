@@ -1,0 +1,93 @@
+import 'package:buy_from_egypt/core/utils/app_colors.dart';
+import 'package:buy_from_egypt/core/utils/styles.dart';
+import 'package:flutter/material.dart';
+
+class CustomTabBar extends StatefulWidget {
+  const CustomTabBar({super.key});
+
+  @override
+  State<CustomTabBar> createState() => _CustomTabBarState();
+}
+
+class _CustomTabBarState extends State<CustomTabBar> {
+  bool isSignUpSelected = true;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: SizedBox(
+        width: 327, 
+        height: 56, 
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            Container(
+              width: 327,
+              height: 56,
+              decoration: BoxDecoration(
+                color: AppColors.c2,
+                borderRadius: BorderRadius.circular(30),
+              ),
+            ),
+            AnimatedAlign(
+              duration: const Duration(milliseconds: 300),
+              alignment: isSignUpSelected
+                  ? Alignment.centerLeft
+                  : Alignment.centerRight,
+              child: Padding(
+                padding: EdgeInsets.only(
+                  top: 4,
+                  bottom: 4,
+                  left: isSignUpSelected ? 0 : 4,
+                  right: isSignUpSelected ? 4 : 0,
+                ),
+                child: Container(
+                  width: 156,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: AppColors.white,
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                ),
+              ),
+            ),
+            // Row for buttons
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                // Sign Up Button
+                GestureDetector(
+                  onTap: () => setState(() => isSignUpSelected = true),
+                  child: const SizedBox(
+                    width: 160,
+                    height: 48,
+                    child: Center(
+                      child: Text(
+                        "Sign Up",
+                        style: Styles.textStyle16,
+                      ),
+                    ),
+                  ),
+                ),
+                // Login Button
+                GestureDetector(
+                  onTap: () => setState(() => isSignUpSelected = false),
+                  child: const SizedBox(
+                    width: 160,
+                    height: 48,
+                    child: Center(
+                      child: Text(
+                        "Login",
+                        style: Styles.textStyle16,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
