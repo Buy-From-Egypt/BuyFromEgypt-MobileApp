@@ -2,19 +2,13 @@ import 'package:buy_from_egypt/features/auth/presentation/widgets/CustomTextButt
 import 'package:buy_from_egypt/features/auth/presentation/widgets/LabeledTextField.dart';
 import 'package:buy_from_egypt/features/auth/presentation/widgets/custom_button.dart';
 import 'package:buy_from_egypt/core/utils/app_colors.dart';
+import 'package:buy_from_egypt/features/auth/presentation/widgets/remember.dart';
 import 'package:flutter/material.dart';
 import 'package:solar_icons/solar_icons.dart';
 
-class SignUpForm extends StatefulWidget {
-  final VoidCallback onShowOtp;
+class LoginForm extends StatelessWidget {
+  const LoginForm({super.key});
 
-  const SignUpForm({super.key, required this.onShowOtp});
-
-  @override
-  State<SignUpForm> createState() => _SignUpFormState();
-}
-
-class _SignUpFormState extends State<SignUpForm> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -34,12 +28,6 @@ class _SignUpFormState extends State<SignUpForm> {
           children: [
             const SizedBox(height: 16),
             const LabeledTextField(
-              label: 'Full Name',
-              icon: SolarIconsOutline.user,
-              hintText: 'Your Name',
-            ),
-            const SizedBox(height: 16),
-            const LabeledTextField(
               label: 'Email Address',
               imagePath: 'assets/images/Message.svg',
               hintText: 'example@gmail.com',
@@ -51,15 +39,17 @@ class _SignUpFormState extends State<SignUpForm> {
               hintText: '********',
               isPassword: true,
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 16),
+            const Remember(),
+            const SizedBox(height: 73),
             CustomButton(
-              onPressed: widget.onShowOtp,
-              text: 'Sign Up',
+              onPressed: () {},
+              text: 'Sign In',
             ),
             const SizedBox(height: 16),
             const CustomTextButton(
-              text1: 'Already have an account? ',
-              text2: 'Login Here',
+              text1: 'You’re new in here? ',
+              text2: 'Create Account',
             ),
           ],
         ),

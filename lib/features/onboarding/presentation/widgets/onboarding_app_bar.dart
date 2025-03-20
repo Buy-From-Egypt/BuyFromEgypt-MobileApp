@@ -55,7 +55,7 @@ class OnboardingAppBar extends StatelessWidget {
           if (currentPage != onboardingDataLength - 1)
             TextButton(
               onPressed: () {
-                Navigator.pushNamed(context, AppRoutes.signUp);
+                Navigator.pushNamed(context, AppRoutes.auth);
               },
               child: Text(
                 "Skip",

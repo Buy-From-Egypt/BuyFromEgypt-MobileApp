@@ -3,8 +3,10 @@ import 'package:buy_from_egypt/core/utils/styles.dart';
 import 'package:buy_from_egypt/features/auth/presentation/widgets/back_button.dart';
 import 'package:flutter/material.dart';
 
-class SignUpHeader extends StatelessWidget {
-  const SignUpHeader({super.key});
+class Header extends StatelessWidget {
+  final String title, description;
+  const Header(
+      {super.key, required this.title, required this.description});
 
   @override
   Widget build(BuildContext context) {
@@ -32,13 +34,13 @@ class SignUpHeader extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Create Account",
+                  title,
                   style:
                       Styles.textStyle22.copyWith(fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  "Ready to Expand Your Business?",
+                 description,
                   style: Styles.textStyle14.copyWith(color: AppColors.c7),
                 ),
               ],

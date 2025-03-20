@@ -1,4 +1,4 @@
-import 'package:buy_from_egypt/core/utils/app_reouter.dart';
+import 'package:buy_from_egypt/core/utils/app_router.dart';
 import 'package:buy_from_egypt/core/utils/app_routes.dart';
 import 'package:flutter/material.dart';
 

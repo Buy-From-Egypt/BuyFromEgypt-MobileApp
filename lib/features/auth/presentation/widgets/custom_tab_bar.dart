@@ -2,15 +2,15 @@ import 'package:buy_from_egypt/core/utils/app_colors.dart';
 import 'package:buy_from_egypt/core/utils/styles.dart';
 import 'package:flutter/material.dart';
 
-class CustomTabBar extends StatefulWidget {
-  const CustomTabBar({super.key});
+class CustomTabBar extends StatelessWidget {
+  final bool isSignUpSelected;
+  final Function(bool) onTabChange;
 
-  @override
-  State<CustomTabBar> createState() => _CustomTabBarState();
-}
-
-class _CustomTabBarState extends State<CustomTabBar> {
-  bool isSignUpSelected = true;
+  const CustomTabBar({
+    super.key,
+    required this.isSignUpSelected,
+    required this.onTabChange,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -31,9 +31,8 @@ class _CustomTabBarState extends State<CustomTabBar> {
             ),
             AnimatedAlign(
               duration: const Duration(milliseconds: 300),
-              alignment: isSignUpSelected
-                  ? Alignment.centerLeft
-                  : Alignment.centerRight,
+              alignment:
+                  isSignUpSelected ? Alignment.centerLeft : Alignment.centerRight,
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
                 child: Container(
@@ -46,36 +45,41 @@ class _CustomTabBarState extends State<CustomTabBar> {
                 ),
               ),
             ),
-            // Row for buttons
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                // Sign Up Button
                 GestureDetector(
-                  onTap: () => setState(() => isSignUpSelected = true),
+                  onTap: () => onTabChange(true),
                   child: SizedBox(
                     width: 160,
                     height: 48,
                     child: Center(
                       child: Text(
                         "Sign Up",
-                        style: Styles.textStyle16
-                            .copyWith(fontWeight: FontWeight.w600),
+                        style: Styles.textStyle16.copyWith(
+                          fontWeight: FontWeight.w600,
+                          color: isSignUpSelected
+                              ? AppColors.primary
+                              : Colors.black,
+                        ),
                       ),
                     ),
                   ),
                 ),
-                // Login Button
                 GestureDetector(
-                  onTap: () => setState(() => isSignUpSelected = false),
+                  onTap: () => onTabChange(false),
                   child: SizedBox(
                     width: 160,
                     height: 48,
                     child: Center(
                       child: Text(
                         "Login",
-                        style: Styles.textStyle16
-                            .copyWith(fontWeight: FontWeight.w600),
+                        style: Styles.textStyle16.copyWith(
+                          fontWeight: FontWeight.w600,
+                          color: isSignUpSelected
+                              ? Colors.black
+                              : AppColors.primary,
+                        ),
                       ),
                     ),
                   ),

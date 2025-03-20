@@ -36,7 +36,7 @@ class OnboardingBottomSection extends StatelessWidget {
             child: ElevatedButton(
               onPressed: () {
                 if (currentPage == onboardingDataLength - 1) {
-                  Navigator.pushNamed(context, AppRoutes.signUp);
+                  Navigator.pushNamed(context, AppRoutes.auth);
                 } else {
                   pageController.nextPage(
                     duration: const Duration(milliseconds: 300),

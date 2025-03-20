@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:solar_icons/solar_icons.dart';
 
 class OtpView extends StatelessWidget {
-  const OtpView({super.key});
+  const OtpView({super.key, required Null Function() onClose});
 
   @override
   Widget build(BuildContext context) {

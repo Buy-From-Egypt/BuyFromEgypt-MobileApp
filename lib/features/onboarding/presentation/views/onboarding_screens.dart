@@ -1,3 +1,4 @@
+import 'package:buy_from_egypt/core/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:buy_from_egypt/features/onboarding/presentation/widgets/onboarding_content.dart';
 import 'package:buy_from_egypt/features/onboarding/presentation/widgets/onboarding_app_bar.dart';
@@ -44,6 +45,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.white,
       body: Column(
         children: [
           OnboardingAppBar(
