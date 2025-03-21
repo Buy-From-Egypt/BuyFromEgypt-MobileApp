@@ -6,4 +6,5 @@ class AppRoutes {
   static const String otpForgetPassword = 'otpForgetPassword';
   static const String updatePassword = 'updatePasswordView';
   static const String successfully = 'successfullyView';
+  static const String preference = 'preferenceView';
   }

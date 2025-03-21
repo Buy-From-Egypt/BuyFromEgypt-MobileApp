@@ -1,4 +1,5 @@
 import 'package:buy_from_egypt/core/utils/app_colors.dart';
+import 'package:buy_from_egypt/core/utils/app_routes.dart';
 import 'package:buy_from_egypt/core/utils/styles.dart';
 import 'package:buy_from_egypt/features/auth/presentation/widgets/custom_button.dart';
 import 'package:buy_from_egypt/features/auth/presentation/widgets/otp_input.dart';
@@ -66,7 +67,7 @@ class OtpView extends StatelessWidget {
                     const SizedBox(height: 38),
                     CustomButton(
                       onPressed: () {
-                        Navigator.pop(context);
+                        Navigator.pushNamed(context, AppRoutes.preference);
                       },
                       text: 'Verify',
                     ),
