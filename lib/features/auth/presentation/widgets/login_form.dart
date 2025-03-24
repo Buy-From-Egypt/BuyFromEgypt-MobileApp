@@ -1,3 +1,4 @@
+import 'package:buy_from_egypt/core/utils/app_routes.dart';
 import 'package:buy_from_egypt/features/auth/presentation/widgets/CustomTextButton.dart';
 import 'package:buy_from_egypt/features/auth/presentation/widgets/LabeledTextField.dart';
 import 'package:buy_from_egypt/features/auth/presentation/widgets/custom_button.dart';
@@ -43,7 +44,9 @@ class LoginForm extends StatelessWidget {
             const Remember(),
             const SizedBox(height: 73),
             CustomButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamed(context, AppRoutes.home);
+              },
               text: 'Sign In',
             ),
             const SizedBox(height: 16),

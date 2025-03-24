@@ -4,6 +4,7 @@ import 'package:buy_from_egypt/features/auth/presentation/views/otp_forget_passw
 import 'package:buy_from_egypt/features/auth/presentation/views/preference_view.dart';
 import 'package:buy_from_egypt/features/auth/presentation/views/successfully_view.dart';
 import 'package:buy_from_egypt/features/auth/presentation/views/update_password_view.dart';
+import 'package:buy_from_egypt/features/home/presentation/views/home_view.dart';
 import 'package:buy_from_egypt/features/onboarding/presentation/views/onboarding_screens.dart';
 import 'package:buy_from_egypt/features/splash/presentation/views/splash_view.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +29,8 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const SuccessfullyView());
       case AppRoutes.preference:
         return MaterialPageRoute(builder: (_) => const PreferenceView());
+      case AppRoutes.home:
+        return MaterialPageRoute(builder: (_) => const HomeView());
       default:
         return MaterialPageRoute(
           builder: (_) => const Scaffold(
