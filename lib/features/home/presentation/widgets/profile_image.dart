@@ -1,19 +1,25 @@
 import 'package:flutter/material.dart';
 
 class ProfileImage extends StatelessWidget {
-  const ProfileImage({super.key});
+  final String path;
+  final double width, height;
+  const ProfileImage(
+      {super.key,
+      required this.path,
+      required this.width,
+      required this.height});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 48,
-      height: 48,
+      width: width,
+      height: height,
       decoration: const BoxDecoration(
         shape: BoxShape.circle,
       ),
       child: ClipOval(
         child: Image.asset(
-          'assets/images/theo.jpeg',
+          path,
           fit: BoxFit.cover,
         ),
       ),

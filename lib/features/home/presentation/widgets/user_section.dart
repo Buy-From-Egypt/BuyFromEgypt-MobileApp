@@ -9,7 +9,11 @@ class UserSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Row(
       children: [
-        ProfileImage(),
+        ProfileImage(
+          path: 'assets/images/theo.jpeg',
+          width: 48,
+          height: 48,
+        ),
         SizedBox(width: 8),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,

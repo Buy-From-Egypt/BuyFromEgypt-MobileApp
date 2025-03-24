@@ -16,7 +16,11 @@ class CustomSellWidget extends StatelessWidget {
       ),
       child: Row(
         children: [
-         const ProfileImage(),
+          const ProfileImage(
+            path: 'assets/images/theo.jpeg',
+            width: 48,
+            height: 48,
+          ),
           const SizedBox(width: 8),
           Expanded(
             child: Container(

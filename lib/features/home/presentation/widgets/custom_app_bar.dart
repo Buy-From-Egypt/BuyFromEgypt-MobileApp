@@ -1,4 +1,5 @@
 import 'package:buy_from_egypt/core/utils/app_colors.dart';
+import 'package:buy_from_egypt/core/utils/app_routes.dart';
 import 'package:buy_from_egypt/core/utils/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -50,10 +51,15 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             const SizedBox(
               width: 16,
             ),
-            SvgPicture.asset(
-              'assets/images/search.svg',
-              height: 24,
-              width: 24,
+            GestureDetector(
+              onTap: (){
+                Navigator.pushNamed(context, AppRoutes.search);
+              },
+              child: SvgPicture.asset(
+                'assets/images/search.svg',
+                height: 24,
+                width: 24,
+              ),
             ),
             const SizedBox(
               width: 16,
