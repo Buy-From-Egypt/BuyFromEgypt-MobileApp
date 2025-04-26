@@ -1,9 +1,11 @@
+import 'package:buy_from_egypt/features/home/presentation/views/market_view.dart';
+import 'package:buy_from_egypt/features/home/presentation/views/order1_view.dart';
+import 'package:flutter/material.dart';
 import 'package:buy_from_egypt/core/utils/app_colors.dart';
 import 'package:buy_from_egypt/features/home/presentation/widgets/bottom_navigation_bar.dart';
-import 'package:buy_from_egypt/features/home/presentation/widgets/custom_app_bar.dart';
 import 'package:buy_from_egypt/features/home/presentation/widgets/custom_sell_widget.dart';
 import 'package:buy_from_egypt/features/home/presentation/widgets/post.dart';
-import 'package:flutter/material.dart';
+import 'package:buy_from_egypt/features/home/presentation/widgets/custom_app_bar.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -15,55 +17,48 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   int currentIndex = 0;
 
-  final List<String> screenTitles = [
-    'Home',
-    'Market',
-    'Orders',
-    'Profile',
+  final List<Widget> pages = [
+    const HomeBody(), // Only Home page has AppBar inside it
+    MarketView(),
+    const Order1View(),
   ];
 
-  final List<NavItem> navItems = [
-    NavItem(
-        label: 'Home',
-        activeIconPath: 'assets/images/home_b.svg',
-        inactiveIconPath: 'assets/images/home.svg'),
-    NavItem(
-        label: 'Market',
-        activeIconPath: 'assets/images/market_b.svg',
-        inactiveIconPath: 'assets/images/market.svg'),
-    NavItem(
-        label: 'Orders',
-        activeIconPath: 'assets/images/orders_b.svg',
-        inactiveIconPath: 'assets/images/orders.svg'),
-    NavItem(
-        label: 'Profile',
-        activeIconPath: 'assets/images/user_b.svg',
-        inactiveIconPath: 'assets/images/user.svg'),
-  ];
+  void _onNavTap(int index) {
+    setState(() {
+      currentIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.white,
-      appBar: const CustomAppBar(),
+      body: pages[currentIndex],
       bottomNavigationBar: CustomBottomNavigationBar(
-        items: navItems,
+        items: defaultNavItems,
         currentIndex: currentIndex,
-        onTap: (index) => setState(() => currentIndex = index),
+        onTap: _onNavTap,
       ),
-      body: Column(
-        children: [
-          const CustomSellWidget(),
-          Expanded(
-            child: ListView.builder(
-              itemCount: 5,
-              itemBuilder: (context, index) {
-                return const Post();
-              },
-            ),
+    );
+  }
+}
+
+class HomeBody extends StatelessWidget {
+  const HomeBody({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        const CustomAppBar(), // ✅ AppBar موجود بس هنا
+        const CustomSellWidget(),
+        Expanded(
+          child: ListView.builder(
+            itemCount: 5,
+            itemBuilder: (context, index) => const Post(),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

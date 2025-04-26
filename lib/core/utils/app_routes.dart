@@ -9,4 +9,5 @@ class AppRoutes {
   static const String preference = 'preferenceView';
   static const String home = 'homeView';
   static const String search = 'searchView';
-  }
+  static const String comment = 'commentView';
+}

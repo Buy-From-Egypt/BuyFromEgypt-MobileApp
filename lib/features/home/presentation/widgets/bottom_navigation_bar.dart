@@ -1,6 +1,6 @@
-import 'package:buy_from_egypt/core/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:buy_from_egypt/core/utils/app_colors.dart';
 
 class CustomBottomNavigationBar extends StatefulWidget {
   final List<NavItem> items;
@@ -65,9 +65,33 @@ class NavItem {
   final String activeIconPath;
   final String inactiveIconPath;
 
-  NavItem({
+  const NavItem({
     required this.label,
     required this.activeIconPath,
     required this.inactiveIconPath,
   });
 }
+
+// Default nav items used across the app
+const List<NavItem> defaultNavItems = [
+  NavItem(
+    label: 'Home',
+    activeIconPath: 'assets/images/home_b.svg',
+    inactiveIconPath: 'assets/images/home.svg',
+  ),
+  NavItem(
+    label: 'Market',
+    activeIconPath: 'assets/images/market_b.svg',
+    inactiveIconPath: 'assets/images/market.svg',
+  ),
+  NavItem(
+    label: 'Orders',
+    activeIconPath: 'assets/images/orders_b.svg',
+    inactiveIconPath: 'assets/images/orders.svg',
+  ),
+  NavItem(
+    label: 'Profile',
+    activeIconPath: 'assets/images/user_b.svg',
+    inactiveIconPath: 'assets/images/user.svg',
+  ),
+];

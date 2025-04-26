@@ -1,4 +1,7 @@
 import 'package:buy_from_egypt/core/utils/app_colors.dart';
+import 'package:buy_from_egypt/core/utils/app_router.dart';
+import 'package:buy_from_egypt/core/utils/app_routes.dart';
+import 'package:buy_from_egypt/features/home/presentation/widgets/action_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -8,7 +11,7 @@ class RateCommentShare extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 24, right: 24 ,bottom: 16),
+      padding: const EdgeInsets.only(left: 24, right: 24, bottom: 16),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -16,7 +19,13 @@ class RateCommentShare extends StatelessWidget {
             children: [
               _buildActionButton('assets/images/star.svg', 'Rate'),
               const SizedBox(width: 16),
-              _buildActionButton('assets/images/Chat Unread.svg', 'Comment'),
+              ActionButton(
+                imagePath: 'assets/images/Chat Unread.svg',
+                label: 'Comment',
+                onTap: () {
+                  Navigator.pushNamed(context, AppRoutes.comment);
+                },
+              ),
             ],
           ),
           _buildShareButton(),
