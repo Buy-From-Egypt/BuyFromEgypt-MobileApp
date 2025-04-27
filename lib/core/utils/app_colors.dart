@@ -6,6 +6,7 @@ class AppColors {
   static const Color background = Color(0xffEAECE1);
   static const Color white = Color(0xffFFFFFF);
   static const Color waring = Color(0xFFFFC62A);
+  static const Color yellow = Color(0xFFFDB723);
   static const Color danger = Color(0xFFF55157);
   static const Color success = Color(0xff00AF6C);
   static const Color info = Color(0xFF5196F3);

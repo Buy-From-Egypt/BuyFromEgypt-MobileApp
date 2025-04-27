@@ -6,7 +6,7 @@ class CustomPostAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CustomPostAppBar({super.key});
 
   @override
-  Size get preferredSize => const Size.fromHeight(56); // Required for AppBar
+  Size get preferredSize => const Size.fromHeight(56);
 
   @override
   Widget build(BuildContext context) {
@@ -36,12 +36,7 @@ class CustomPostAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       title: const Text(
         'Create Post',
-        style: TextStyle(
-          color: Color(0xFF101623),
-          fontSize: 16,
-          fontWeight: FontWeight.w600,
-          fontFamily: 'Manrope',
-        ),
+        style: Styles.textStyle16400,
       ),
       backgroundColor: Colors.white,
       elevation: 0,

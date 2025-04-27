@@ -1,3 +1,4 @@
+import 'package:buy_from_egypt/core/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:smooth_star_rating_null_safety/smooth_star_rating_null_safety.dart';
@@ -43,10 +44,10 @@ class CommentItem extends StatelessWidget {
                     starCount: 5,
                     rating: 4,
                     size: 20.0,
-                    filledIconData: Icons.star,
+                    filledIconData: Icons.star_rounded,
                     halfFilledIconData: Icons.star_half,
-                    color: Color(0xFFFFC529),
-                    borderColor: Color(0xFFFFC529),
+                    color: AppColors.yellow,
+                    borderColor: AppColors.yellow,
                     spacing: 2.0,
                   ),
                 ],

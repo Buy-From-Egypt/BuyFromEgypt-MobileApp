@@ -1,4 +1,5 @@
 import 'package:buy_from_egypt/core/utils/styles.dart';
+import 'package:buy_from_egypt/features/home/presentation/views/order1_view.dart';
 import 'package:flutter/material.dart';
 import 'package:buy_from_egypt/core/utils/app_colors.dart';
 import 'package:buy_from_egypt/core/utils/svg_icon.dart';
@@ -16,7 +17,12 @@ class OrderButton extends StatelessWidget {
             height: 52,
             width: 260,
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Order1View()),
+                );
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
                 shape: RoundedRectangleBorder(
