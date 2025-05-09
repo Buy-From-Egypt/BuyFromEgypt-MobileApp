@@ -5,11 +5,15 @@ import 'package:flutter/material.dart';
 class CustomButton extends StatelessWidget {
   const CustomButton({
     super.key,
-    required this.onPressed, required this.text,
+    required this.onPressed,
+    required this.text,
+    required this.isLoading,
   });
 
-  final VoidCallback onPressed;
-  final String text ;
+  final Function()? onPressed;
+  final String text;
+  final bool isLoading;
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -22,14 +26,23 @@ class CustomButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(100),
           ),
         ),
-        onPressed: onPressed,
-        child:  Text(
-          text,
-          style: Styles.textStyle16.copyWith(
-            fontWeight: FontWeight.w600,
-            color: AppColors.white,
-          ),
-        ),
+        onPressed: isLoading ? null : onPressed,
+        child: isLoading
+            ? const SizedBox(
+                width: 20,
+                height: 20,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  valueColor: AlwaysStoppedAnimation<Color>(AppColors.white),
+                ),
+              )
+            : Text(
+                text,
+                style: Styles.textStyle16.copyWith(
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.white,
+                ),
+              ),
       ),
     );
   }

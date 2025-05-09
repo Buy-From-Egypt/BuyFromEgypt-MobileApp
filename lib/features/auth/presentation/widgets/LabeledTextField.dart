@@ -1,14 +1,19 @@
 import 'package:buy_from_egypt/core/utils/app_colors.dart';
 import 'package:buy_from_egypt/core/utils/styles.dart';
 import 'package:buy_from_egypt/features/auth/presentation/widgets/custom_text_field.dart';
+import 'package:buy_from_egypt/features/auth/presentation/widgets/custom_text_field_for_phone.dart';
 import 'package:flutter/material.dart';
 
-class LabeledTextField extends StatelessWidget {
+class LabeledTextField extends StatefulWidget {
   final String label;
   final IconData? icon;
   final String? imagePath;
   final String hintText;
   final bool isPassword;
+  final bool isNumber;
+  final ValueChanged<String>? onChanged;
+  final TextEditingController controller;
+  final String? Function(dynamic) validator;
 
   const LabeledTextField({
     super.key,
@@ -17,29 +22,50 @@ class LabeledTextField extends StatelessWidget {
     this.imagePath,
     required this.hintText,
     this.isPassword = false,
+    this.isNumber = false,
+    this.onChanged,
+    required this.validator,
+    required this.controller,
   });
 
   @override
+  State<LabeledTextField> createState() => _LabeledTextFieldState();
+}
+
+class _LabeledTextFieldState extends State<LabeledTextField> {
+  @override
   Widget build(BuildContext context) {
+    final isPhone = widget.label.toLowerCase() == 'phone number';
+
     return SizedBox(
       width: 327,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            label,
+            widget.label,
             style: Styles.textStyle14.copyWith(
               color: AppColors.primary,
               fontWeight: FontWeight.w600,
             ),
           ),
           const SizedBox(height: 8),
-          CustomTextField(
-            label: hintText,
-            icon: icon,
-            imagePath: imagePath,
-            isPassword: isPassword,
-          ),
+          isPhone
+              ? CustomTextFieldForPhone(
+                  controller: widget.controller,
+                  onChanged: widget.onChanged,
+                  isNumber: widget.isNumber,
+                  label: widget.hintText,
+                )
+              : CustomTextField(
+                  controller: widget.controller,
+                  onChanged: widget.onChanged,
+                  label: widget.hintText,
+                  icon: widget.icon,
+                  imagePath: widget.imagePath,
+                  isPassword: widget.isPassword,
+                  isNumber: widget.isNumber,
+                ),
         ],
       ),
     );

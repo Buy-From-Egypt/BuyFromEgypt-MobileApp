@@ -1,8 +1,9 @@
 import 'package:buy_from_egypt/core/utils/app_colors.dart';
 import 'package:buy_from_egypt/core/utils/app_routes.dart';
+import 'package:buy_from_egypt/core/utils/styles.dart';
 import 'package:buy_from_egypt/features/auth/presentation/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:solar_icons/solar_icons.dart';
 
 class SuccessfullyView extends StatelessWidget {
   const SuccessfullyView({super.key});
@@ -10,62 +11,68 @@ class SuccessfullyView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.white,
-      body: Column(
-        children: [
-          const SizedBox(height: 215),
-          Expanded(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SvgPicture.asset(
-                  'assets/images/Illustration.svg',
-                  height: 140,
-                  width: 265,
-                ),
-                const SizedBox(height: 24),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 32),
-                  child: Text(
-                    "You’ve successfully changed your password",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                      fontFamily: 'Manrope',
-                      color: AppColors.primary,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 12),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 40),
-                  child: Text(
-                    "Always remember your password for your account at Africa Store!",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                      fontFamily: 'Manrope',
-                      color: AppColors.c5,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 32),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  child: CustomButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, AppRoutes.auth);
-                    },
-                    text: 'Back to login',
-                  ),
-                ),
-              ],
-            ),
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/images/Rectangle.png'),
+            fit: BoxFit.cover,
           ),
-        ],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const SizedBox(height: 80),
+            Container(
+              width: 80,
+              height: 80,
+              decoration: BoxDecoration(
+                color: AppColors.primary,
+                borderRadius: BorderRadius.circular(40),
+              ),
+              child: const Icon(
+                SolarIconsOutline.checkCircle,
+                color: AppColors.white,
+                size: 40,
+              ),
+            ),
+            const SizedBox(height: 24),
+            Text(
+              'Password Updated!',
+              style: Styles.textStyle22.copyWith(
+                fontWeight: FontWeight.bold,
+                color: AppColors.white,
+              ),
+            ),
+            const SizedBox(height: 16),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 40),
+              child: Text(
+                'Your password has been successfully updated. You can now log in with your new password.',
+                textAlign: TextAlign.center,
+                style: Styles.textStyle14.copyWith(
+                  color: AppColors.white,
+                ),
+              ),
+            ),
+            const SizedBox(height: 40),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: CustomButton(
+                onPressed: () {
+                  Navigator.pushNamedAndRemoveUntil(
+                    context,
+                    AppRoutes.auth,
+                    (route) => false,
+                  );
+                },
+                text: 'Back to Login',
+                isLoading: false,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

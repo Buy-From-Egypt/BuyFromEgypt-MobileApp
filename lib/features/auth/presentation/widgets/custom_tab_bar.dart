@@ -5,11 +5,10 @@ import 'package:flutter/material.dart';
 class CustomTabBar extends StatelessWidget {
   final bool isSignUpSelected;
   final Function(bool) onTabChange;
-
   const CustomTabBar({
     super.key,
     required this.isSignUpSelected,
-    required this.onTabChange,
+    required this.onTabChange, 
   });
 
   @override

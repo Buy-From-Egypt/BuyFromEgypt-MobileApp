@@ -9,6 +9,9 @@ class CustomTextField extends StatefulWidget {
   final IconData? icon;
   final String? imagePath;
   final bool isPassword;
+  final bool isNumber;
+  final ValueChanged<String>? onChanged;
+  final TextEditingController controller;
 
   const CustomTextField({
     super.key,
@@ -16,7 +19,11 @@ class CustomTextField extends StatefulWidget {
     this.icon,
     this.imagePath,
     this.isPassword = false,
+    this.isNumber = false,
+    this.onChanged,
+    required this.controller,
   });
+
 
   @override
   State<CustomTextField> createState() => _CustomTextFieldState();
@@ -45,6 +52,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
           const SizedBox(width: 16),
           Expanded(
             child: TextField(
+              controller: widget.controller,
+              keyboardType:
+                  widget.isNumber ? TextInputType.number : TextInputType.text,
               cursorColor: Colors.black,
               obscureText: widget.isPassword ? obscureText : false,
               style: Styles.textStyle14.copyWith(color: AppColors.c6),

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "96432882414",
+    "project_id": "buyfromegypt-702be",
+    "storage_bucket": "buyfromegypt-702be.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:96432882414:android:bb04d1f3df22238577e9ff",
+        "android_client_info": {
+          "package_name": "com.example.buy_from_egypt"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDy1RhMMhylv-y92zWgMWO_I_xCyjW-CDA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

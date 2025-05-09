@@ -15,7 +15,7 @@ class AuthView extends StatefulWidget {
 }
 
 class _AuthViewState extends State<AuthView> {
-  bool _showVerifyOverlay = false;
+  // bool _showVerifyOverlay = false;
   bool _isSignUpSelected = true;
 
   @override
@@ -35,7 +35,7 @@ class _AuthViewState extends State<AuthView> {
               _isSignUpSelected
                   ? const Header(
                       title: "Create Account",
-                      description: ' Ready to Expand Your Business?',
+                      description: 'Ready to Expand Your Business?',
                     )
                   : const LoginHeader(),
               Expanded(
@@ -59,15 +59,23 @@ class _AuthViewState extends State<AuthView> {
                             setState(() => _isSignUpSelected = isSignUp);
                           },
                         ),
+                        const SizedBox(height: 16),
                         SizedBox(
                           width: double.infinity,
                           child: _isSignUpSelected
                               ? SignUpForm(
-                                  onShowOtp: () {
-                                    setState(() => _showVerifyOverlay = true);
+                                  onShowOtp: (email, phone) {
+                                    showDialog(
+                                      context: context,
+                                      barrierDismissible: false,
+                                      builder: (context) => OtpView(
+                                        email: email,
+                                        phoneNumber: phone,
+                                      ),
+                                    );
                                   },
                                 )
-                              : const LoginForm(),
+                              : LoginForm(),
                         ),
                       ],
                     ),
@@ -76,19 +84,19 @@ class _AuthViewState extends State<AuthView> {
               ),
             ],
           ),
-          if (_showVerifyOverlay)
-            Positioned.fill(
-              child: Container(
-                color: Colors.black.withOpacity(0.4),
-                child: Center(
-                  child: OtpView(
-                    onClose: () {
-                      setState(() => _showVerifyOverlay = false);
-                    },
-                  ),
-                ),
-              ),
-            ),
+          // if (_showVerifyOverlay)
+          //   Positioned.fill(
+          //     child: Container(
+          //       color: Colors.black.withOpacity(0.4),
+          //       child: Center(
+          //         child: OtpView(
+          //           onClose: () {
+          //             setState(() => _showVerifyOverlay = false);
+          //           },
+          //         ),
+          //       ),
+          //     ),
+          //   ),
         ],
       ),
     );

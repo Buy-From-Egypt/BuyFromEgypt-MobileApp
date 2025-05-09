@@ -1,4 +1,5 @@
 import 'package:buy_from_egypt/core/utils/app_colors.dart';
+import 'package:buy_from_egypt/features/auth/presentation/widgets/custom_button.dart';
 import 'package:buy_from_egypt/features/auth/presentation/widgets/industry_selection.dart';
 import 'package:buy_from_egypt/features/auth/presentation/widgets/preference_header.dart';
 import 'package:buy_from_egypt/features/auth/presentation/widgets/supplier_type_selector.dart';
@@ -68,13 +69,14 @@ class _PreferenceViewState extends State<PreferenceView> {
                   ),
                   ActiveColorSwitch(
                     initialValue: true,
-                    scale: 0.7, 
-                    onChanged: (value) {
-                    },
-                  )
+                    scale: 0.7,
+                    onChanged: (value) {},
+                  ),
                 ],
               ),
             ),
+            const SizedBox(height: 24),
+            CustomButton(onPressed: () {}, text: 'Submit', isLoading: false,),
             const SizedBox(height: 32),
           ],
         ),

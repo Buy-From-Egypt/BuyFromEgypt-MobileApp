@@ -1,6 +1,8 @@
 import 'package:buy_from_egypt/features/auth/presentation/views/auth_view.dart';
 import 'package:buy_from_egypt/features/auth/presentation/views/forget_password_view.dart';
 import 'package:buy_from_egypt/features/auth/presentation/views/otp_forget_password.dart';
+import 'package:buy_from_egypt/features/auth/presentation/views/pending_more_info.dart';
+import 'package:buy_from_egypt/features/auth/presentation/views/pending_view.dart';
 import 'package:buy_from_egypt/features/auth/presentation/views/preference_view.dart';
 import 'package:buy_from_egypt/features/auth/presentation/views/successfully_view.dart';
 import 'package:buy_from_egypt/features/auth/presentation/views/update_password_view.dart';
@@ -22,14 +24,18 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const OnboardingScreen());
       case AppRoutes.forgetPassword:
         return MaterialPageRoute(builder: (_) => const ForgetPasswordView());
-      case AppRoutes.otpForgetPassword:
-        return MaterialPageRoute(builder: (_) => const OtpForgetPassword());
       case AppRoutes.updatePassword:
         return MaterialPageRoute(builder: (_) => const UpdatePasswordView());
+        case AppRoutes.otpForgetPassword:
+        return MaterialPageRoute(builder: (_) => const OtpForgetPasswordScreen());
       case AppRoutes.successfully:
         return MaterialPageRoute(builder: (_) => const SuccessfullyView());
       case AppRoutes.preference:
         return MaterialPageRoute(builder: (_) => const PreferenceView());
+        case AppRoutes.pending:
+        return MaterialPageRoute(builder: (_) => const PendingView());
+        case AppRoutes.pendingMoreInfo:
+        return MaterialPageRoute(builder: (_) => const PendingMoreInfo());
       case AppRoutes.home:
         return MaterialPageRoute(builder: (_) => const HomeView());
       case AppRoutes.search:

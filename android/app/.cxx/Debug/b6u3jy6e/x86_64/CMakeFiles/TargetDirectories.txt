@@ -1,0 +1,2 @@
+C:/flutter_projects/buy_from_egypt/android/app/.cxx/Debug/b6u3jy6e/x86_64/CMakeFiles/edit_cache.dir
+C:/flutter_projects/buy_from_egypt/android/app/.cxx/Debug/b6u3jy6e/x86_64/CMakeFiles/rebuild_cache.dir

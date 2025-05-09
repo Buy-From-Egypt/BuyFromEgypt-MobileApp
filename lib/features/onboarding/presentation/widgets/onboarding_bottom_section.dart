@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:buy_from_egypt/core/utils/app_colors.dart';
 import 'package:buy_from_egypt/core/utils/app_routes.dart';
 import 'package:buy_from_egypt/core/utils/styles.dart';
@@ -34,9 +35,14 @@ class OnboardingBottomSection extends StatelessWidget {
             width: 327,
             height: 52,
             child: ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 if (currentPage == onboardingDataLength - 1) {
-                  Navigator.pushNamed(context, AppRoutes.auth);
+                  // حفظ إن المستخدم شاف الـ Onboarding
+                  final prefs = await SharedPreferences.getInstance();
+                  await prefs.setBool('seen_onboarding', true);
+
+                  // الانتقال لشاشة الـ Login
+                  Navigator.pushReplacementNamed(context, AppRoutes.auth);
                 } else {
                   pageController.nextPage(
                     duration: const Duration(milliseconds: 300),
