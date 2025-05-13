@@ -1,5 +1,5 @@
-import 'package:buy_from_egypt/features/home/presentation/views/market_view.dart';
-import 'package:buy_from_egypt/features/home/presentation/views/order1_view.dart';
+import 'package:buy_from_egypt/features/home/presentation/views/market_view_ex.dart';
+import 'package:buy_from_egypt/features/home/presentation/views/order1_view_ex.dart';
 import 'package:flutter/material.dart';
 import 'package:buy_from_egypt/core/utils/app_colors.dart';
 import 'package:buy_from_egypt/features/home/presentation/widgets/bottom_navigation_bar.dart';
@@ -19,8 +19,8 @@ class _HomeViewState extends State<HomeView> {
 
   final List<Widget> pages = [
     const HomeBody(), // Only Home page has AppBar inside it
-    MarketView(),
-    const Order1View(),
+    MarketViewEx(),
+    const Order1ViewEx(),
   ];
 
   void _onNavTap(int index) {

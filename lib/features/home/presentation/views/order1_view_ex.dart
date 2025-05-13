@@ -5,14 +5,14 @@ import 'package:buy_from_egypt/features/home/presentation/widgets/orders2_button
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class Order1View extends StatefulWidget {
-  const Order1View({super.key});
+class Order1ViewEx extends StatefulWidget {
+  const Order1ViewEx({super.key});
 
   @override
-  State<Order1View> createState() => _Order1ViewState();
+  State<Order1ViewEx> createState() => _Order1ViewExState();
 }
 
-class _Order1ViewState extends State<Order1View> {
+class _Order1ViewExState extends State<Order1ViewEx> {
   int currentIndex = 2;
 
   late double width;

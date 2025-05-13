@@ -7,14 +7,15 @@ class CommentHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8),
+      padding: EdgeInsets.symmetric(horizontal: width * 0.06, vertical: 8),
       child: Row(
         children: [
           const Text('Comments', style: Styles.textStyle12pr),
-          const SizedBox(width: 6),
+          SizedBox(width: width * 0.015),
           Container(
-            width: 35,
+            width: width * 0.09,
             height: 21,
             alignment: Alignment.center,
             decoration: BoxDecoration(
@@ -25,10 +26,10 @@ class CommentHeader extends StatelessWidget {
           ),
           const Spacer(),
           const Text('Most recent', style: Styles.textStyle12pr),
-          const SizedBox(width: 4),
+          SizedBox(width: width * 0.01),
           Icon(
             Icons.expand_more_rounded,
-            size: 16, // adjust based on your UI
+            size: width * 0.04,
             color: AppColors.primary,
           ),
         ],

@@ -1,14 +1,13 @@
-import 'package:buy_from_egypt/core/utils/app_colors.dart';
 import 'package:buy_from_egypt/core/utils/styles.dart';
 import 'package:buy_from_egypt/features/home/presentation/widgets/comment_header.dart';
+import 'package:buy_from_egypt/features/home/presentation/widgets/comment_input_bar_im.dart';
 import 'package:buy_from_egypt/features/home/presentation/widgets/comment_item.dart';
 import 'package:buy_from_egypt/features/home/presentation/widgets/commrnt_input_bar.dart';
 import 'package:buy_from_egypt/features/home/presentation/widgets/dark_back_button.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
-class CommentView extends StatelessWidget {
-  const CommentView({super.key});
+class CommentViewIm extends StatelessWidget {
+  const CommentViewIm({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +44,7 @@ class CommentView extends StatelessWidget {
             ),
           ),
           const Divider(thickness: 1, height: 1),
-          const CommentInputBar(),
+          const CommentInputBarIm(),
         ],
       ),
     );

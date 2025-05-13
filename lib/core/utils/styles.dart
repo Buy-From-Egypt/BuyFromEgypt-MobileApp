@@ -12,6 +12,7 @@ abstract class Styles {
       fontWeight: FontWeight.w400,
       fontFamily: 'Manrope',
       color: AppColors.c5);
+
   static const textStyle14w = TextStyle(
       fontSize: 14,
       fontWeight: FontWeight.w400,
@@ -35,6 +36,11 @@ abstract class Styles {
   static const textStyle14c7 = TextStyle(
       fontSize: 14,
       fontWeight: FontWeight.w400,
+      fontFamily: 'Manrope',
+      color: AppColors.c7);
+  static const textStyle16c7 = TextStyle(
+      fontSize: 16,
+      fontWeight: FontWeight.w600,
       fontFamily: 'Manrope',
       color: AppColors.c7);
   static const textStyle14info = TextStyle(
@@ -129,6 +135,16 @@ abstract class Styles {
       fontWeight: FontWeight.w400,
       fontFamily: 'Manrope',
       color: AppColors.background);
+  static const textStyle9w = TextStyle(
+      fontSize: 9,
+      fontWeight: FontWeight.w600,
+      fontFamily: 'Manrope',
+      color: AppColors.white);
+  static const textStyle10 = TextStyle(
+      fontSize: 10,
+      fontWeight: FontWeight.w400,
+      fontFamily: 'Manrope',
+      color: AppColors.c7);
   static const textStyle12w = TextStyle(
       fontSize: 12,
       fontWeight: FontWeight.w400,
@@ -144,4 +160,9 @@ abstract class Styles {
       fontWeight: FontWeight.w400,
       fontFamily: 'Manrope',
       color: AppColors.black);
+  static const textStyle13c7 = TextStyle(
+      fontSize: 13,
+      fontWeight: FontWeight.w400,
+      fontFamily: 'Manrope',
+      color: AppColors.c7);
 }

@@ -8,16 +8,16 @@ import 'package:buy_from_egypt/features/home/presentation/widgets/custom_back_bu
 import 'package:buy_from_egypt/features/home/presentation/widgets/order_button.dart';
 import 'package:buy_from_egypt/features/home/presentation/widgets/product_dot_indicator.dart';
 
-class ProductInfoView extends StatefulWidget {
-  const ProductInfoView({super.key, required this.product});
+class ProductInfoViewEx extends StatefulWidget {
+  const ProductInfoViewEx({super.key, required this.product});
 
   final Product product;
 
   @override
-  State<ProductInfoView> createState() => _ProductInfoViewState();
+  State<ProductInfoViewEx> createState() => _ProductInfoViewExState();
 }
 
-class _ProductInfoViewState extends State<ProductInfoView> {
+class _ProductInfoViewExState extends State<ProductInfoViewEx> {
   int _selectedColorIndex = 0;
   int _currentPage = 0;
   int currentIndex = 1;

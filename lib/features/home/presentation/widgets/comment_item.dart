@@ -9,8 +9,9 @@ class CommentItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 10),
+      padding: EdgeInsets.symmetric(horizontal: width * 0.06, vertical: 13),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -21,31 +22,32 @@ class CommentItem extends StatelessWidget {
                 radius: 24,
                 backgroundImage: AssetImage('assets/images/theo.jpeg'),
               ),
-              const SizedBox(width: 10),
+              SizedBox(width: width * 0.025),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Row(
+                  Row(
                     children: [
-                      Text(
+                      const Text(
                         'Mohamed Talaat',
                         style: Styles.textStyle14pr,
                       ),
-                      SizedBox(width: 8),
-                      Text(
+                      SizedBox(width: width * 0.02),
+                      const Text(
                         '5 hour ago',
                         style: Styles.textStyle12700,
                       ),
                     ],
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: width * 0.01),
                   SmoothStarRating(
                     allowHalfRating: false,
                     starCount: 5,
                     rating: 4,
-                    size: 20.0,
+                    size: width * 0.05,
                     filledIconData: Icons.star_rounded,
                     halfFilledIconData: Icons.star_half,
+                    defaultIconData: Icons.star_border_rounded,
                     color: AppColors.yellow,
                     borderColor: AppColors.yellow,
                     spacing: 2.0,
@@ -54,22 +56,22 @@ class CommentItem extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: width * 0.02),
           const Text(
             'It is a long established fact that a reader will be distracted...',
             style: Styles.textStyle14pr,
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: width * 0.02),
           Row(
             children: [
-              SvgPicture.asset('assets/images/Vector.svg'),
-              const SizedBox(width: 4),
+              SvgPicture.asset('assets/images/Vector.svg', width: 20),
+              SizedBox(width: width * 0.01),
               const Text('42', style: Styles.textStyle14pr),
-              const SizedBox(width: 16),
-              SvgPicture.asset('assets/images/dislike.svg'),
-              const SizedBox(width: 4),
+              SizedBox(width: width * 0.04),
+              SvgPicture.asset('assets/images/dislike.svg', width: 20),
+              SizedBox(width: width * 0.01),
               const Text('3', style: Styles.textStyle14pr),
-              const SizedBox(width: 16),
+              SizedBox(width: width * 0.04),
               const Text('Reply', style: Styles.textStyle14pr),
             ],
           ),

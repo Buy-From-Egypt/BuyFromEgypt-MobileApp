@@ -10,14 +10,14 @@ import 'package:buy_from_egypt/features/home/presentation/widgets/user_section.d
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-class CreatePost extends StatefulWidget {
-  const CreatePost({super.key});
+class CreatePostEx extends StatefulWidget {
+  const CreatePostEx({super.key});
 
   @override
-  State<CreatePost> createState() => _CreatePostState();
+  State<CreatePostEx> createState() => _CreatePostExState();
 }
 
-class _CreatePostState extends State<CreatePost> {
+class _CreatePostExState extends State<CreatePostEx> {
   final FocusNode _focusNode = FocusNode();
   final TextEditingController _controller = TextEditingController();
   bool _isBottomSheetVisible = false;

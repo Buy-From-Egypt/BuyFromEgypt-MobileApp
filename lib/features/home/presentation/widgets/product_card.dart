@@ -1,5 +1,5 @@
 import 'package:buy_from_egypt/features/auth/data/models.dart';
-import 'package:buy_from_egypt/features/home/presentation/views/product_info_view.dart';
+import 'package:buy_from_egypt/features/home/presentation/views/product_info_view_ex.dart';
 import 'package:flutter/material.dart';
 
 class ProductCard extends StatelessWidget {
@@ -14,7 +14,7 @@ class ProductCard extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (_) => ProductInfoView(product: product),
+            builder: (_) => ProductInfoViewEx(product: product),
           ),
         );
       },

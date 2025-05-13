@@ -7,14 +7,14 @@ import 'package:buy_from_egypt/features/home/presentation/widgets/order_filter_t
 import 'package:buy_from_egypt/features/home/presentation/widgets/order_search_bar.dart';
 import 'package:flutter/material.dart';
 
-class Orders2View extends StatefulWidget {
-  const Orders2View({super.key});
+class Orders2ViewEx extends StatefulWidget {
+  const Orders2ViewEx({super.key});
 
   @override
-  State<Orders2View> createState() => _Orders2ViewState();
+  State<Orders2ViewEx> createState() => _Orders2ViewExState();
 }
 
-class _Orders2ViewState extends State<Orders2View> {
+class _Orders2ViewExState extends State<Orders2ViewEx> {
   int currentIndex = 2;
 
   @override
