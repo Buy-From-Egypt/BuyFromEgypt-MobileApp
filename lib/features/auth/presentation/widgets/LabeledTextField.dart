@@ -3,6 +3,7 @@ import 'package:buy_from_egypt/core/utils/styles.dart';
 import 'package:buy_from_egypt/features/auth/presentation/widgets/custom_text_field.dart';
 import 'package:buy_from_egypt/features/auth/presentation/widgets/custom_text_field_for_phone.dart';
 import 'package:flutter/material.dart';
+import 'package:solar_icons/solar_icons.dart';
 
 class LabeledTextField extends StatefulWidget {
   final String label;
@@ -13,7 +14,10 @@ class LabeledTextField extends StatefulWidget {
   final bool isNumber;
   final ValueChanged<String>? onChanged;
   final TextEditingController controller;
-  final String? Function(dynamic) validator;
+  final String? Function(String?)? validator;
+  final bool obscureText;
+  final Widget? suffixIcon;
+  final TextInputType? keyboardType;
 
   const LabeledTextField({
     super.key,
@@ -26,6 +30,9 @@ class LabeledTextField extends StatefulWidget {
     this.onChanged,
     required this.validator,
     required this.controller,
+    this.obscureText = false,
+    this.suffixIcon,
+    this.keyboardType,
   });
 
   @override
@@ -65,6 +72,10 @@ class _LabeledTextFieldState extends State<LabeledTextField> {
                   imagePath: widget.imagePath,
                   isPassword: widget.isPassword,
                   isNumber: widget.isNumber,
+                  obscureText: widget.obscureText,
+                  suffixIcon: widget.suffixIcon,
+                  keyboardType: widget.keyboardType,
+                  validator: widget.validator,
                 ),
         ],
       ),

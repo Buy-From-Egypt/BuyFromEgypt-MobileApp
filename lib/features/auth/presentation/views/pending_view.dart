@@ -1,89 +1,90 @@
-import 'package:buy_from_egypt/core/utils/app_colors.dart';
-import 'package:buy_from_egypt/core/utils/app_routes.dart';
+import 'dart:async';
 import 'package:buy_from_egypt/features/auth/presentation/widgets/custom_button.dart';
-import 'package:buy_from_egypt/features/auth/presentation/widgets/custom_button_with_border.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:buy_from_egypt/services/api_service.dart';
+import 'package:buy_from_egypt/core/utils/app_routes.dart';
+import 'package:flutter_svg/svg.dart';
 
-class PendingView extends StatelessWidget {
-  const PendingView({super.key});
+class PendingView extends StatefulWidget {
+  final String email;
+
+  const PendingView({super.key, required this.email});
+
+  @override
+  State<PendingView> createState() => _PendingViewState();
+}
+
+class _PendingViewState extends State<PendingView> {
+  late Timer _timer;
+  bool _isActive = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _startPolling();
+  }
+
+  void _startPolling() {
+    _timer = Timer.periodic(const Duration(seconds: 10), (_) => _checkAccountStatus());
+  }
+
+  Future<void> _checkAccountStatus() async {
+    try {
+      final response = await ApiService.login(widget.email, 'dummy-password');
+      if (response['status'] == 'ACTIVE') {
+        _isActive = true;
+        _timer.cancel();
+        if (mounted) {
+          Navigator.pushNamedAndRemoveUntil(context, AppRoutes.home, (route) => false);
+        }
+      }
+    } catch (e) {
+      // Handle errors silently (optional: show Snackbar or log)
+    }
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.white,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(
-                  width: 327,
-                  child: Text(
-                    'Your Account is Under Review',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 22,
-                      fontFamily: 'Manrope',
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                ),
-                SizedBox(height: 16),
-                SizedBox(
-                  width: 327,
-                  child: Text(
-                    'Thank you for registering with Buy From Egypt.\nOur team is currently reviewing your documents to ensure a safe and trusted marketplace experience.',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 14,
-                      fontFamily: 'Manrope',
-                      fontWeight: FontWeight.w500,
-                      height: 1.5,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 64,
-            ),
-            SvgPicture.asset(
+      backgroundColor: Colors.white,
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Spacer(),
+          Center(
+            child: SvgPicture.asset(
               'assets/images/undraw_file-search_cbur 1.svg',
+              width: 200,
               height: 200,
-              width: 327,
             ),
-            const SizedBox(
-              height: 80,
-            ),
-            Text(
-              'Need assistance?',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 18,
-                fontFamily: 'Manrope',
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            const SizedBox(
-              height: 24,
-            ),
-            CustomButton(onPressed: () {}, text: 'Contact Support', isLoading: false,),
-            const SizedBox(
-              height: 16,
-            ),
-            CustomButtonWithBorder(
-                onPressed: () {
-                  Navigator.pushNamed(context, AppRoutes.pendingMoreInfo);
-                },
-                text: 'More Info', isLoading: false,),
-          ],
-        ),
+          ),
+          const SizedBox(height: 24),
+          const Text(
+            'Your account is under review',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 8),
+          const Text(
+            'Please wait for admin approval.\nWe’ll notify you by email once approved.',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 16),
+          ),
+          const Spacer(),
+          CustomButton(onPressed: () {
+            Navigator.pushNamedAndRemoveUntil(
+                      context,
+                      AppRoutes.auth,
+                      (route) => false,
+                    );
+          }, text: 'Back to Login', isLoading: false),
+          const SizedBox(height: 32),
+        ],
       ),
     );
   }

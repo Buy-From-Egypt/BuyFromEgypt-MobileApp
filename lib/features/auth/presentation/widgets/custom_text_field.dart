@@ -12,6 +12,10 @@ class CustomTextField extends StatefulWidget {
   final bool isNumber;
   final ValueChanged<String>? onChanged;
   final TextEditingController controller;
+  final bool obscureText;
+  final Widget? suffixIcon;
+  final TextInputType? keyboardType;
+  final String? Function(String?)? validator;
 
   const CustomTextField({
     super.key,
@@ -22,8 +26,11 @@ class CustomTextField extends StatefulWidget {
     this.isNumber = false,
     this.onChanged,
     required this.controller,
+    this.obscureText = false,
+    this.suffixIcon,
+    this.keyboardType,
+    this.validator,
   });
-
 
   @override
   State<CustomTextField> createState() => _CustomTextFieldState();
@@ -51,33 +58,35 @@ class _CustomTextFieldState extends State<CustomTextField> {
             Icon(widget.icon, size: 24, color: AppColors.primary),
           const SizedBox(width: 16),
           Expanded(
-            child: TextField(
+            child: TextFormField(
               controller: widget.controller,
-              keyboardType:
-                  widget.isNumber ? TextInputType.number : TextInputType.text,
+              keyboardType: widget.keyboardType ?? (widget.isNumber ? TextInputType.number : TextInputType.text),
               cursorColor: Colors.black,
-              obscureText: widget.isPassword ? obscureText : false,
+              obscureText: widget.isPassword ? widget.obscureText : false,
               style: Styles.textStyle14.copyWith(color: AppColors.c6),
+              validator: widget.validator,
+              onChanged: widget.onChanged,
               decoration: InputDecoration(
                 hintText: widget.label,
-                hintStyle:
-                    Styles.textStyle14.copyWith(color: AppColors.secondary),
+                hintStyle: Styles.textStyle14.copyWith(color: AppColors.secondary),
                 border: InputBorder.none,
+                errorStyle: const TextStyle(height: 0),
               ),
             ),
           ),
           if (widget.isPassword)
-            IconButton(
-              icon: Icon(
-                obscureText
-                    ? SolarIconsOutline.eyeClosed
-                    : SolarIconsOutline.eye,
-                color: AppColors.primary,
-              ),
-              onPressed: () => setState(() {
-                obscureText = !obscureText;
-              }),
-            ),
+            widget.suffixIcon ??
+                IconButton(
+                  icon: Icon(
+                    widget.obscureText
+                        ? SolarIconsOutline.eyeClosed
+                        : SolarIconsOutline.eye,
+                    color: AppColors.primary,
+                  ),
+                  onPressed: () => setState(() {
+                    obscureText = !obscureText;
+                  }),
+                ),
           const SizedBox(width: 24),
         ],
       ),

@@ -1,17 +1,22 @@
 import 'package:buy_from_egypt/core/utils/app_colors.dart';
-import 'package:buy_from_egypt/features/auth/presentation/views/successfully_view.dart';
-import 'package:buy_from_egypt/features/auth/presentation/widgets/LabeledTextField.dart';
+import 'package:buy_from_egypt/core/utils/app_routes.dart';
 import 'package:buy_from_egypt/features/auth/presentation/widgets/custom_button.dart';
+import 'package:buy_from_egypt/features/auth/presentation/widgets/LabeledTextField.dart';
 import 'package:buy_from_egypt/features/auth/presentation/widgets/header.dart';
+import 'package:buy_from_egypt/services/api_service.dart';
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:crypto/crypto.dart';
-import 'dart:convert';
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:logger/logger.dart';
 
+final logger = Logger();
 
 class UpdatePasswordView extends StatefulWidget {
-  const UpdatePasswordView({super.key});
+  final String email;
+  
+  const UpdatePasswordView({
+    super.key,
+    required this.email,
+  });
 
   @override
   State<UpdatePasswordView> createState() => _UpdatePasswordViewState();
@@ -19,28 +24,48 @@ class UpdatePasswordView extends StatefulWidget {
 
 class _UpdatePasswordViewState extends State<UpdatePasswordView> {
   final _formKey = GlobalKey<FormState>();
-  final _passwordController = TextEditingController();
+  final _newPasswordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
   bool _isLoading = false;
+  bool _isNewPasswordVisible = false;
+  bool _isConfirmPasswordVisible = false;
+  String _errorMessage = '';
 
-  String _hashPassword(String password) {
-    final bytes = utf8.encode(password);
-    final hash = sha256.convert(bytes);
-    return hash.toString();
+  @override
+  void dispose() {
+    _newPasswordController.dispose();
+    _confirmPasswordController.dispose();
+    super.dispose();
   }
 
-  String? _passwordValidator(dynamic value) {
-    if (value == null || value.toString().isEmpty) {
-      return 'Please enter a password';
+  // Password validator
+  String? _passwordValidator(String? value) {
+    if (value?.isEmpty ?? true) {
+      return 'Please enter your password';
     }
-    if (value.toString().length < 8) {
+    if (value!.length < 8) {
       return 'Password must be at least 8 characters';
+    }
+    if (!value.contains(RegExp(r'[A-Z]'))) {
+      return 'Password must contain at least one uppercase letter';
+    }
+    if (!value.contains(RegExp(r'[a-z]'))) {
+      return 'Password must contain at least one lowercase letter';
+    }
+    if (!value.contains(RegExp(r'[0-9]'))) {
+      return 'Password must contain at least one number';
+    }
+    if (!value.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) {
+      return 'Password must contain at least one special character';
     }
     return null;
   }
 
-  String? _confirmPasswordValidator(dynamic value) {
-    if (value.toString() != _passwordController.text) {
+  String? _confirmPasswordValidator(String? value) {
+    if (value?.isEmpty ?? true) {
+      return 'Please confirm your password';
+    }
+    if (value != _newPasswordController.text) {
       return 'Passwords do not match';
     }
     return null;
@@ -49,47 +74,48 @@ class _UpdatePasswordViewState extends State<UpdatePasswordView> {
   Future<void> _updatePassword() async {
     if (!_formKey.currentState!.validate()) return;
 
-    setState(() => _isLoading = true);
+    setState(() {
+      _isLoading = true;
+      _errorMessage = '';
+    });
 
     try {
-      final prefs = await SharedPreferences.getInstance();
-      final userId = prefs.getString('reset_user_id');
-
-      if (userId == null) throw Exception('User ID not found');
-
-      final supabase = Supabase.instance.client;
-      final hashedPassword = _hashPassword(_passwordController.text);
-
-      // Update the password in the customers table
-      await supabase.from('customers').update({
-        'password': hashedPassword,
-      }).eq('id', userId);
-
-      if (mounted) {
-        // Clear stored data
-        await prefs.remove('reset_user_id');
-        await prefs.remove('email');
-
-        // Navigate to success screen
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const SuccessfullyView(),
-          ),
-          (route) => false,
-        );
+      // Check connectivity
+      final connectivityResult = await Connectivity().checkConnectivity();
+      if (connectivityResult == ConnectivityResult.none) {
+        throw Exception('No internet connection. Please check your network and try again.');
       }
+
+      // Update password using API
+      await ApiService.resetPassword(
+        widget.email,
+        _newPasswordController.text,
+        _confirmPasswordController.text,
+      );
+
+      if (!mounted) return;
+
+      // Navigate to success screen
+      await Navigator.pushNamedAndRemoveUntil(
+        context,
+        AppRoutes.successfully,
+        (route) => false,
+      );
     } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Error updating password: ${e.toString()}'),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
+      if (!mounted) return;
+      setState(() {
+        _errorMessage = e.toString();
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e.toString()),
+          backgroundColor: Colors.red,
+        ),
+      );
     } finally {
-      if (mounted) setState(() => _isLoading = false);
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
     }
   }
 
@@ -129,20 +155,52 @@ class _UpdatePasswordViewState extends State<UpdatePasswordView> {
                           LabeledTextField(
                             label: 'New Password',
                             hintText: '********',
-                            isPassword: true,
-                            controller: _passwordController,
+                            controller: _newPasswordController,
                             validator: _passwordValidator,
-                            onChanged: (_) {},
+                            obscureText: !_isNewPasswordVisible,
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                _isNewPasswordVisible
+                                    ? Icons.visibility_off
+                                    : Icons.visibility,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  _isNewPasswordVisible = !_isNewPasswordVisible;
+                                });
+                              },
+                            ),
                           ),
                           const SizedBox(height: 16),
                           LabeledTextField(
                             label: 'Confirm Password',
                             hintText: '********',
-                            isPassword: true,
                             controller: _confirmPasswordController,
                             validator: _confirmPasswordValidator,
-                            onChanged: (_) {}, 
+                            obscureText: !_isConfirmPasswordVisible,
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                _isConfirmPasswordVisible
+                                    ? Icons.visibility_off
+                                    : Icons.visibility,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  _isConfirmPasswordVisible = !_isConfirmPasswordVisible;
+                                });
+                              },
+                            ),
                           ),
+                          if (_errorMessage.isNotEmpty) ...[
+                            const SizedBox(height: 16),
+                            Text(
+                              _errorMessage,
+                              style: const TextStyle(
+                                color: Colors.red,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ],
                           const SizedBox(height: 32),
                           CustomButton(
                             text: 'Update Password',
@@ -160,12 +218,5 @@ class _UpdatePasswordViewState extends State<UpdatePasswordView> {
         ],
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _passwordController.dispose();
-    _confirmPasswordController.dispose();
-    super.dispose();
   }
 }

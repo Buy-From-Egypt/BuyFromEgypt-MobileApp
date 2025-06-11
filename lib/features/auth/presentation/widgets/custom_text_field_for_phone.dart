@@ -8,6 +8,7 @@ class CustomTextFieldForPhone extends StatefulWidget {
   final String label;
   final ValueChanged<String>? onChanged;
   final TextEditingController controller;
+  final TextInputType? keyboardType;
 
   const CustomTextFieldForPhone({
     super.key,
@@ -15,6 +16,7 @@ class CustomTextFieldForPhone extends StatefulWidget {
     required this.label,
     this.onChanged,
     required this.controller,
+    this.keyboardType,
   });
 
   @override
@@ -64,8 +66,7 @@ class _CustomTextFieldState extends State<CustomTextFieldForPhone> {
           Expanded(
             child: TextField(
               controller: widget.controller,
-              keyboardType:
-                  widget.isNumber ? TextInputType.number : TextInputType.text,
+              keyboardType: widget.keyboardType ?? (widget.isNumber ? TextInputType.number : TextInputType.text),
               cursorColor: Colors.black,
               style: Styles.textStyle14.copyWith(color: AppColors.c6),
               decoration: InputDecoration(

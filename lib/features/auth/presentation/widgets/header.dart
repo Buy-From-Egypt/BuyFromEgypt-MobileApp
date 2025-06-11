@@ -1,7 +1,7 @@
-import 'package:buy_from_egypt/core/utils/app_colors.dart';
-import 'package:buy_from_egypt/core/utils/styles.dart';
 import 'package:buy_from_egypt/features/auth/presentation/widgets/back_button.dart';
 import 'package:flutter/material.dart';
+import 'package:buy_from_egypt/core/utils/app_colors.dart';
+import 'package:buy_from_egypt/core/utils/styles.dart';
 
 class Header extends StatelessWidget {
   final String title, description;
@@ -40,7 +40,7 @@ class Header extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 Text(
-                 description,
+                  description,
                   style: Styles.textStyle14.copyWith(color: AppColors.c7),
                 ),
               ],

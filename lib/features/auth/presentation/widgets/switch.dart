@@ -32,7 +32,7 @@ class _ActiveColorSwitchState extends State<ActiveColorSwitch> {
       scale: widget.scale, 
       child: CupertinoSwitch(
         value: isActive,
-        activeColor: const Color(0xFF2563EB),
+        activeTrackColor: const Color(0xFF2563EB),
         onChanged: (bool value) {
           setState(() {
             isActive = value;

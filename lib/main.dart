@@ -1,77 +1,127 @@
-import 'package:buy_from_egypt/core/utils/app_router.dart';
+import 'package:buy_from_egypt/core/utils/app_colors.dart';
 import 'package:buy_from_egypt/core/utils/app_routes.dart';
 import 'package:buy_from_egypt/core/utils/auth_utils.dart';
-import 'package:buy_from_egypt/services/notification_service.dart';
+import 'package:buy_from_egypt/features/auth/presentation/views/auth_view.dart';
+import 'package:buy_from_egypt/features/auth/presentation/views/forget_password_view.dart';
+import 'package:buy_from_egypt/features/auth/presentation/views/otp_forget_password.dart';
+import 'package:buy_from_egypt/features/auth/presentation/views/pending_view.dart';
+import 'package:buy_from_egypt/features/auth/presentation/views/preference_view.dart';
+import 'package:buy_from_egypt/features/auth/presentation/views/successfully_view.dart';
+import 'package:buy_from_egypt/features/auth/presentation/views/update_password_view.dart';
+import 'package:buy_from_egypt/features/home/presentation/views/home_view.dart';
+import 'package:buy_from_egypt/features/home/presentation/views/search_view.dart';
+import 'package:buy_from_egypt/features/onboarding/presentation/views/onboarding_screens.dart';
+import 'package:buy_from_egypt/features/splash/presentation/views/splash_view.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:flutter/services.dart';
+import 'package:logger/logger.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 
-Future<void> main() async {
+final logger = Logger();
+
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Initialize notifications first
-  await NotificationService.initialize();
+  // Set preferred orientations
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
 
-  await Supabase.initialize(
-    url: 'https://idjaqtqdqzcupqwkgvuu.supabase.co',
-    anonKey:
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlkamFxdHFkcXpjdXBxd2tndnV1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY1MTYxMjEsImV4cCI6MjA2MjA5MjEyMX0.zhpUtgw100MJcWslWSC6KNTz3k14l7KTFa9oWyK9YtE',
+  // Set system UI overlay style
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.dark,
+      statusBarBrightness: Brightness.light,
+    ),
   );
 
-  // Request notification permissions explicitly
-  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
-  await flutterLocalNotificationsPlugin
-      .resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin>()
-      ?.requestPermission();
+  // Initialize app
+  await initializeApp();
 
   runApp(const MyApp());
+}
+
+Future<void> initializeApp() async {
+  try {
+    // Check connectivity
+    final connectivityResult = await Connectivity().checkConnectivity();
+    if (connectivityResult == ConnectivityResult.none) {
+      logger.w('No internet connection during initialization');
+    }
+
+    // Clear any existing session
+    await AuthUtils.clearUserSession();
+
+    logger.i('App initialized successfully');
+  } catch (e) {
+    logger.e('Error initializing app: $e', error: e);
+  }
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  Future<String> _getInitialRoute() async {
-    final prefs = await SharedPreferences.getInstance();
-    final hasSeenOnboarding = prefs.getBool('seen_onboarding') ?? false;
-
-    if (!hasSeenOnboarding) {
-      return AppRoutes.onboarding;
-    }
-
-    final isLoggedIn = await AuthUtils.checkSession();
-    if (!isLoggedIn) {
-      return AppRoutes.auth;
-    }
-
-    final userType = prefs.getString('user_type');
-    if (userType == 'Importer') {
-      return AppRoutes.preference;
-    } else {
-      return AppRoutes.home;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<String>(
-      future: _getInitialRoute(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return const MaterialApp(
-            home: Scaffold(
-              body: Center(child: CircularProgressIndicator()),
-            ),
-          );
-        }
-
-        return MaterialApp(
-          debugShowCheckedModeBanner: false,
-          initialRoute: snapshot.data!,
-          onGenerateRoute: AppRouter.generateRoute,
-        );
+    return MaterialApp(
+      title: 'Buy From Egypt',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        primaryColor: AppColors.primary,
+        scaffoldBackgroundColor: AppColors.white,
+        appBarTheme: const AppBarTheme(
+          backgroundColor: AppColors.white,
+          elevation: 0,
+          iconTheme: IconThemeData(color: AppColors.primary),
+          titleTextStyle: TextStyle(
+            color: AppColors.primary,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+      initialRoute: AppRoutes.splash,
+      routes: {
+        AppRoutes.splash: (context) => const SplashView(),
+        AppRoutes.onboarding: (context) => const OnboardingScreen(),
+        AppRoutes.auth: (context) => const AuthView(),
+        AppRoutes.home: (context) => const HomeView(),
+        AppRoutes.forgetPassword: (context) => const ForgetPasswordView(),
+        AppRoutes.updatePassword: (context) {
+          final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+          final email = args?['email'] as String?;
+          if (email == null) {
+            return const Scaffold(
+              body: Center(child: Text('Email is required for password update')),
+            );
+          }
+          return UpdatePasswordView(email: email);
+        },
+        AppRoutes.otpForgetPassword: (context) {
+          final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+          final email = args?['email'] as String?;
+          if (email == null) {
+            return const Scaffold(
+              body: Center(child: Text('Email is required for OTP verification')),
+            );
+          }
+          return OtpForgetPassword(email: email);
+        },
+        AppRoutes.successfully: (context) => const SuccessfullyView(),
+        AppRoutes.preference: (context) => const PreferenceView(),
+        AppRoutes.pending: (context) {
+          final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+          final email = args?['email'] as String?;
+          if (email == null) {
+            return const Scaffold(
+              body: Center(child: Text('Email is required')),
+            );
+          }
+          return PendingView(email: email);
+        },
+        AppRoutes.search: (context) => const SearchView(),
       },
     );
   }

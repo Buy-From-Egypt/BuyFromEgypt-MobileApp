@@ -2,14 +2,27 @@ import 'package:buy_from_egypt/core/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class Remember extends StatefulWidget {
-  const Remember({super.key});
+  final ValueChanged<bool>? onChanged;
+  final bool initialValue;
+
+  const Remember({
+    super.key,
+    this.onChanged,
+    this.initialValue = false,
+  });
 
   @override
   State<Remember> createState() => _RememberState();
 }
 
 class _RememberState extends State<Remember> {
-  bool isChecked = false;
+  late bool isChecked;
+
+  @override
+  void initState() {
+    super.initState();
+    isChecked = widget.initialValue;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +40,7 @@ class _RememberState extends State<Remember> {
                   setState(() {
                     isChecked = value ?? false;
                   });
+                  widget.onChanged?.call(isChecked);
                 },
                 materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
               ),

@@ -1,31 +1,31 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class NotificationService {
   static final FlutterLocalNotificationsPlugin _notifications =
       FlutterLocalNotificationsPlugin();
 
   static Future<void> initialize() async {
-    const androidSettings =
-        AndroidInitializationSettings('@mipmap/ic_launcher');
-    const iosSettings = DarwinInitializationSettings(
-      requestAlertPermission: true,
-      requestBadgePermission: true,
-      requestSoundPermission: true,
-    );
+  const androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
+  const iosSettings = DarwinInitializationSettings(
+    requestAlertPermission: true,
+    requestBadgePermission: true,
+    requestSoundPermission: true,
+  );
 
-    const settings = InitializationSettings(
-      android: androidSettings,
-      iOS: iosSettings,
-    );
+  const settings = InitializationSettings(
+    android: androidSettings,
+    iOS: iosSettings,
+  );
 
-    await _notifications.initialize(settings);
+  await _notifications.initialize(settings);
 
-    // Request permissions for Android
-    await _notifications
-        .resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin>()
-        ?.requestPermission();
+  // Request permissions for Android 13+
+  if (await Permission.notification.isDenied) {
+    await Permission.notification.request();
   }
+}
+
 
   static Future<void> showOtpNotification(String otp) async {
     const androidDetails = AndroidNotificationDetails(
