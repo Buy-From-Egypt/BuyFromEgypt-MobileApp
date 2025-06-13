@@ -1,66 +1,127 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:buy_from_egypt/core/utils/styles.dart';
+import 'package:buy_from_egypt/features/home/presentation/view_model/comment/comment_cubit.dart';
+import 'package:buy_from_egypt/features/home/presentation/view_model/comment/comment_state.dart';
 
-class CommentInputBarIm extends StatelessWidget {
-  const CommentInputBarIm({super.key});
+class CommentInputBarIm extends StatefulWidget {
+  final Function(String) onSend;
+
+  const CommentInputBarIm({
+    Key? key,
+    required this.onSend,
+  }) : super(key: key);
+
+  @override
+  State<CommentInputBarIm> createState() => _CommentInputBarImState();
+}
+
+class _CommentInputBarImState extends State<CommentInputBarIm> {
+  final TextEditingController _commentController = TextEditingController();
+  bool _hasText = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _commentController.addListener(_onTextChanged);
+  }
+
+  void _onTextChanged() {
+    setState(() {
+      _hasText = _commentController.text.trim().isNotEmpty;
+    });
+  }
+
+  @override
+  void dispose() {
+    _commentController.removeListener(_onTextChanged);
+    _commentController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Color(0x0F000000), // Very soft black (6% opacity)
-            offset: Offset(0, -4), // Shadow goes upward
-            blurRadius: 12,
-            spreadRadius: 0,
-          ),
-        ],
-      ),
-      child: SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0)
-                  .copyWith(top: 8, bottom: 12),
-              child: const Row(
-                children: [
-                  CircleAvatar(
-                    radius: 24,
-                    backgroundImage: AssetImage('assets/images/theo.jpeg'),
-                  ),
-                  SizedBox(width: 10),
-                  Expanded(
-                    child: TextField(
-                      decoration: InputDecoration(
-                        contentPadding: EdgeInsets.symmetric(vertical: 10),
-                        hintText: 'Add Comment.....',
-                        hintStyle: Styles.textStyle14c5,
-                        border: InputBorder.none,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const Divider(thickness: 1, height: 1),
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12),
-              child: Row(
-                children: [
-                  SvgPicture.asset('assets/images/image.svg'),
-                  const SizedBox(width: 8),
-                  SvgPicture.asset('assets/images/video.svg'),
-                  const Spacer(),
-                  const Text('Send', style: Styles.textStyle18),
-                ],
-              ),
+    return BlocListener<CommentCubit, CommentState>(
+      listener: (context, state) {
+        if (state is CommentSent) {
+          _commentController.clear();
+        }
+      },
+      child: Container(
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Color(0x0F000000),
+              offset: Offset(0, -4),
+              blurRadius: 12,
+              spreadRadius: 0,
             ),
           ],
+        ),
+        child: SafeArea(
+          child: Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8.0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const CircleAvatar(
+                  radius: 20,
+                  backgroundImage: AssetImage('assets/images/theo.jpeg'),
+                  backgroundColor: Colors.grey,
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: TextField(
+                    controller: _commentController,
+                    decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 16),
+                      hintText: 'Add a comment...',
+                      hintStyle: Styles.textStyle14c5,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20.0),
+                        borderSide: BorderSide.none,
+                      ),
+                      filled: true,
+                      fillColor: Colors.grey[100],
+                    ),
+                    maxLines: null,
+                    keyboardType: TextInputType.multiline,
+                    textCapitalization: TextCapitalization.sentences,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                BlocBuilder<CommentCubit, CommentState>(
+                  builder: (context, state) {
+                    final bool isSending = state is CommentSending;
+                    final bool canSend = _hasText && !isSending;
+
+                    return IconButton(
+                      icon: isSending
+                          ? const SizedBox(
+                              width: 24,
+                              height: 24,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2.5,
+                                valueColor:
+                                    AlwaysStoppedAnimation<Color>(Colors.blue),
+                              ),
+                            )
+                          : Icon(Icons.send,
+                              color: canSend ? Colors.blue : Colors.grey[400]),
+                      onPressed: canSend
+                          ? () {
+                              widget.onSend(_commentController.text.trim());
+                            }
+                          : null,
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );

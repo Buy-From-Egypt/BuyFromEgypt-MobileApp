@@ -3,7 +3,9 @@ import 'package:buy_from_egypt/core/utils/app_colors.dart';
 import 'package:buy_from_egypt/core/utils/styles.dart';
 
 class CommentHeader extends StatelessWidget {
-  const CommentHeader({super.key});
+  final int commentCount;
+
+  const CommentHeader({super.key, required this.commentCount});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +24,10 @@ class CommentHeader extends StatelessWidget {
               color: AppColors.primary,
               borderRadius: BorderRadius.circular(10),
             ),
-            child: const Text('50', style: Styles.textStyle9),
+            child: Text(
+              '$commentCount',
+              style: Styles.textStyle9,
+            ),
           ),
           const Spacer(),
           const Text('Most recent', style: Styles.textStyle12pr),

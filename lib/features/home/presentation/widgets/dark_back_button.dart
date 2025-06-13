@@ -1,4 +1,4 @@
-import 'package:buy_from_egypt/core/utils/app_colors.dart';
+// lib/features/home/presentation/widgets/dark_back_button.dart
 import 'package:flutter/material.dart';
 
 class DarkBackButton extends StatelessWidget {
@@ -7,18 +7,15 @@ class DarkBackButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 36,
-      height: 36,
+      width: 40, // Example size
+      height: 40, // Example size
       decoration: BoxDecoration(
+        color: Colors.black.withOpacity(0.1), // Or a specific dark color
         shape: BoxShape.circle,
-        border: Border.all(
-          color: AppColors.c5, // You can adjust this color
-          width: 1.5,
-        ),
       ),
       child: const Icon(
-        Icons.arrow_back,
-        color: AppColors.primary,
+        Icons.arrow_back_ios_new,
+        color: Colors.black, // Dark icon color
         size: 20,
       ),
     );

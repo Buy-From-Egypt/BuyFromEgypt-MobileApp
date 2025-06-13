@@ -1,12 +1,12 @@
 import 'package:buy_from_egypt/core/utils/app_colors.dart';
-import 'package:buy_from_egypt/core/utils/app_router.dart';
 import 'package:buy_from_egypt/core/utils/app_routes.dart';
 import 'package:buy_from_egypt/features/home/presentation/widgets/action_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class RateCommentShare extends StatelessWidget {
-  const RateCommentShare({super.key});
+  final String postId; // 📌 נוסיף את ה־postId
+  const RateCommentShare({super.key, required this.postId});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,11 @@ class RateCommentShare extends StatelessWidget {
                 imagePath: 'assets/images/Chat Unread.svg',
                 label: 'Comment',
                 onTap: () {
-                  Navigator.pushNamed(context, AppRoutes.comment);
+                  Navigator.pushNamed(
+                    context,
+                    AppRoutes.comment,
+                    arguments: postId,
+                  );
                 },
               ),
             ],
@@ -37,21 +41,15 @@ class RateCommentShare extends StatelessWidget {
   Widget _buildActionButton(String imagePath, String label) {
     return Row(
       children: [
-        SvgPicture.asset(
-          imagePath,
-          height: 18,
-          width: 18,
-        ),
+        SvgPicture.asset(imagePath, height: 18, width: 18),
         const SizedBox(width: 8),
-        Text(
-          label,
-          style: const TextStyle(
-            color: Color(0xFF3B3C36),
-            fontSize: 12,
-            fontFamily: 'Manrope',
-            fontWeight: FontWeight.w400,
-          ),
-        ),
+        Text(label,
+            style: const TextStyle(
+              color: Color(0xFF3B3C36),
+              fontSize: 12,
+              fontFamily: 'Manrope',
+              fontWeight: FontWeight.w400,
+            )),
       ],
     );
   }
@@ -68,10 +66,7 @@ class RateCommentShare extends StatelessWidget {
         child: SizedBox(
           height: 18,
           width: 18,
-          child: SvgPicture.asset(
-            'assets/images/right up.svg',
-            fit: BoxFit.contain,
-          ),
+          child: SvgPicture.asset('assets/images/right up.svg'),
         ),
       ),
     );

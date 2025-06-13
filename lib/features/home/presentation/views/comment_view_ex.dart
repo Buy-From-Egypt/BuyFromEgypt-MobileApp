@@ -1,5 +1,6 @@
 import 'package:buy_from_egypt/core/utils/app_colors.dart';
 import 'package:buy_from_egypt/core/utils/styles.dart';
+import 'package:buy_from_egypt/features/home/presentation/view_model/comment/comment_model.dart';
 import 'package:buy_from_egypt/features/home/presentation/widgets/comment_header.dart';
 import 'package:buy_from_egypt/features/home/presentation/widgets/comment_item.dart';
 import 'package:buy_from_egypt/features/home/presentation/widgets/commrnt_input_bar.dart';
@@ -11,6 +12,19 @@ class CommentViewEx extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // بيانات وهمية
+    final dummyComments = List.generate(5, (index) {
+      /*return CommentModel(
+        id: '$index',
+        contant: 'This is comment number $index',
+        userName: 'User $index',
+        createdAt: DateTime.now().subtract(Duration(hours: index)),
+        rating: 4,
+        likes: 10 + index,
+        dislikes: 1,
+      );*/
+    });
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: PreferredSize(
@@ -35,14 +49,15 @@ class CommentViewEx extends StatelessWidget {
       ),
       body: Column(
         children: [
-          const CommentHeader(),
-          Expanded(
+          /*  const CommentHeader(),*/
+          /*    Expanded(
             child: ListView.builder(
               padding: const EdgeInsets.symmetric(vertical: 12),
-              itemCount: 5,
-              itemBuilder: (context, index) => const CommentItem(),
+              itemCount: dummyComments.length,
+              itemBuilder: (context, index) =>
+                  CommentItem(comment: dummyComments[index]),
             ),
-          ),
+          ),*/
           const Divider(thickness: 1, height: 1),
           const CommentInputBar(),
         ],

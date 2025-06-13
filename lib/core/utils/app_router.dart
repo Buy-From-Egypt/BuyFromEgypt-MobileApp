@@ -5,6 +5,7 @@ import 'package:buy_from_egypt/features/auth/presentation/views/preference_view.
 import 'package:buy_from_egypt/features/auth/presentation/views/successfully_view.dart';
 import 'package:buy_from_egypt/features/auth/presentation/views/update_password_view.dart';
 import 'package:buy_from_egypt/features/home/presentation/views/comment_view_ex.dart';
+import 'package:buy_from_egypt/features/home/presentation/views/comment_view_im.dart';
 import 'package:buy_from_egypt/features/home/presentation/views/home_view.dart';
 import 'package:buy_from_egypt/features/home/presentation/views/search_view.dart';
 import 'package:buy_from_egypt/features/onboarding/presentation/views/onboarding_screens.dart';
@@ -36,7 +37,11 @@ class AppRouter {
       case AppRoutes.search:
         return MaterialPageRoute(builder: (_) => const SearchView());
       case AppRoutes.comment:
-        return MaterialPageRoute(builder: (_) => const CommentViewEx());
+        final postId = settings.arguments as String;
+        return MaterialPageRoute(
+          builder: (_) => CommentViewIm(postId: postId),
+        );
+
       default:
         return MaterialPageRoute(
           builder: (_) => const Scaffold(

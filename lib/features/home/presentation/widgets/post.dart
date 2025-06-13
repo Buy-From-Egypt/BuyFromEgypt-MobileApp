@@ -1,11 +1,15 @@
-import 'package:buy_from_egypt/features/home/presentation/widgets/description.dart';
+import 'dart:ui';
+
+import 'package:buy_from_egypt/features/home/presentation/view_model/post/model/post_model.dart';
 import 'package:buy_from_egypt/features/home/presentation/widgets/header_of_card.dart';
 import 'package:buy_from_egypt/features/home/presentation/widgets/rate_comment_share.dart';
 import 'package:buy_from_egypt/features/home/presentation/widgets/rating_and_comments.dart';
 import 'package:flutter/material.dart';
 
 class Post extends StatelessWidget {
-  const Post({super.key});
+  final PostModel post;
+
+  const Post({super.key, required this.post});
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +17,17 @@ class Post extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const HeaderOfCard(),
-        const Description(),
+
+        // ✅ description from model
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8),
+          child: Text(
+            post.content,
+            style: const TextStyle(fontSize: 14),
+          ),
+        ),
+
+        // ✅ fixed image for now
         Padding(
           padding: const EdgeInsets.only(left: 24, right: 24, bottom: 16),
           child: Container(
@@ -31,11 +45,13 @@ class Post extends StatelessWidget {
             ),
           ),
         ),
+
         const RatingAndComments(),
-        const RateCommentShare(),
-        const Divider(
-          thickness: 4,
-        )
+
+        // ✅ Use postId
+        RateCommentShare(postId: post.postId),
+
+        const Divider(thickness: 4),
       ],
     );
   }
