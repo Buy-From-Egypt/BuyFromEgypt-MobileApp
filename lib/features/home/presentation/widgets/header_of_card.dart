@@ -8,13 +8,15 @@ class HeaderOfCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Padding(
-      padding: EdgeInsets.only(left: 24 , right: 24, top: 24, bottom: 8),
+      padding: EdgeInsets.only(left: 24, right: 24, top: 24, bottom: 8),
       child: Column(
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              UserSection(),
+              UserSection(
+                timeAgo: '2 h ago',
+              ),
               ActionButtons(),
             ],
           ),

@@ -4,7 +4,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:solar_icons/solar_icons.dart';
 
 class CustomBackButton extends StatelessWidget {
-  const CustomBackButton({super.key});
+  const CustomBackButton(
+      {super.key, required Color iconColor, required Color borderColor});
 
   @override
   Widget build(BuildContext context) {

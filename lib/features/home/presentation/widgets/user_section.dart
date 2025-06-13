@@ -3,24 +3,26 @@ import 'package:buy_from_egypt/features/home/presentation/widgets/profile_image.
 import 'package:flutter/material.dart';
 
 class UserSection extends StatelessWidget {
-  const UserSection({super.key});
+  final String? timeAgo;
+
+  const UserSection({super.key, this.timeAgo});
 
   @override
   Widget build(BuildContext context) {
-    return const Row(
+    return Row(
       children: [
-        ProfileImage(
+        const ProfileImage(
           path: 'assets/images/theo.jpeg',
           width: 48,
           height: 48,
         ),
-        SizedBox(width: 8),
+        const SizedBox(width: 8),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            UserDetails(),
-            SizedBox(height: 4),
-            Text(
+            UserDetails(timeAgo: timeAgo), // pass timeAgo down
+            const SizedBox(height: 4),
+            const Text(
               'Samsung Electronics',
               style: TextStyle(
                 color: Color(0xFF666666),
@@ -38,14 +40,16 @@ class UserSection extends StatelessWidget {
 }
 
 class UserDetails extends StatelessWidget {
-  const UserDetails({super.key});
+  final String? timeAgo;
+
+  const UserDetails({super.key, this.timeAgo});
 
   @override
   Widget build(BuildContext context) {
-    return const Row(
+    return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(
+        const Text(
           'Theo James',
           style: TextStyle(
             color: AppColors.primary,
@@ -54,16 +58,18 @@ class UserDetails extends StatelessWidget {
             fontWeight: FontWeight.w800,
           ),
         ),
-        SizedBox(width: 8),
-        Text(
-          '2 h ago',
-          style: TextStyle(
-            color: AppColors.c5,
-            fontSize: 11,
-            fontFamily: 'Manrope',
-            fontWeight: FontWeight.w400,
+        if (timeAgo != null) ...[
+          const SizedBox(width: 8),
+          Text(
+            timeAgo!,
+            style: const TextStyle(
+              color: AppColors.c5,
+              fontSize: 11,
+              fontFamily: 'Manrope',
+              fontWeight: FontWeight.w400,
+            ),
           ),
-        ),
+        ],
       ],
     );
   }

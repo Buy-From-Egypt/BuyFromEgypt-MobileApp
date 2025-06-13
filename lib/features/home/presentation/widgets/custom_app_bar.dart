@@ -1,6 +1,7 @@
 import 'package:buy_from_egypt/core/utils/app_colors.dart';
 import 'package:buy_from_egypt/core/utils/app_routes.dart';
 import 'package:buy_from_egypt/core/utils/styles.dart';
+import 'package:buy_from_egypt/features/home/presentation/views/chats_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -43,16 +44,24 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               style: Styles.textStyle16.copyWith(fontWeight: FontWeight.bold),
             ),
             const Spacer(),
-            SvgPicture.asset(
-              'assets/images/messages.svg',
-              height: 24,
-              width: 24,
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ChatsView()),
+                );
+              },
+              child: SvgPicture.asset(
+                'assets/images/messages.svg',
+                height: 24,
+                width: 24,
+              ),
             ),
             const SizedBox(
               width: 16,
             ),
             GestureDetector(
-              onTap: (){
+              onTap: () {
                 Navigator.pushNamed(context, AppRoutes.search);
               },
               child: SvgPicture.asset(
