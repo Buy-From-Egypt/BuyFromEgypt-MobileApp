@@ -1,4 +1,5 @@
 import 'package:buy_from_egypt/core/utils/app_colors.dart';
+import 'package:buy_from_egypt/core/utils/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -20,10 +21,30 @@ class CustomBottomNavigationBar extends StatefulWidget {
 }
 
 class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
+  void _handleNavigation(int index) {
+    widget.onTap(index);
+    
+    // Navigate to the appropriate view based on the index
+    switch (index) {
+      case 0: // Home
+        Navigator.pushReplacementNamed(context, AppRoutes.home);
+        break;
+      case 1: // Market
+        Navigator.pushReplacementNamed(context, AppRoutes.market);
+        break;
+      case 2: // Orders
+        Navigator.pushReplacementNamed(context, AppRoutes.orders1);
+        break;
+      case 3: // Profile
+        // TODO: Add profile route when implemented
+        break;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
-      onTap: widget.onTap,
+      onTap: _handleNavigation,
       currentIndex: widget.currentIndex,
       type: BottomNavigationBarType.fixed,
       selectedItemColor: AppColors.primary,

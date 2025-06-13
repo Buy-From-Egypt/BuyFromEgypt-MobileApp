@@ -11,4 +11,7 @@ class AppRoutes {
   static const String search = '/searchView';
   static const String pending = '/pendingView';
   static const String pendingMoreInfo = '/pendingMoreInfo';
+  static const String market = '/marketView';
+  static const String orders1 = '/orders1View';
+  static const String orders2 = '/orders2View';
 }

@@ -10,6 +10,9 @@ import 'package:buy_from_egypt/features/auth/presentation/views/successfully_vie
 import 'package:buy_from_egypt/features/auth/presentation/views/update_password_view.dart';
 import 'package:buy_from_egypt/features/home/presentation/views/home_view.dart';
 import 'package:buy_from_egypt/features/home/presentation/views/search_view.dart';
+import 'package:buy_from_egypt/features/marketplace/presentation/views/market_view.dart';
+import 'package:buy_from_egypt/features/marketplace/presentation/views/order1_view.dart';
+import 'package:buy_from_egypt/features/marketplace/presentation/views/order2_view.dart';
 import 'package:buy_from_egypt/features/onboarding/presentation/views/onboarding_screens.dart';
 import 'package:buy_from_egypt/features/splash/presentation/views/splash_view.dart';
 import 'package:flutter/material.dart';
@@ -88,6 +91,9 @@ class MyApp extends StatelessWidget {
         AppRoutes.onboarding: (context) => const OnboardingScreen(),
         AppRoutes.auth: (context) => const AuthView(),
         AppRoutes.home: (context) => const HomeView(),
+        AppRoutes.market: (context) => MarketView(),
+        AppRoutes.orders1: (context) => const Order1View(),
+        AppRoutes.orders2: (context) => const Orders2View(),
         AppRoutes.forgetPassword: (context) => const ForgetPasswordView(),
         AppRoutes.updatePassword: (context) {
           final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
