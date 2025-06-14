@@ -2,6 +2,7 @@ import 'package:buy_from_egypt/core/utils/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:buy_from_egypt/core/utils/app_colors.dart';
 import 'package:buy_from_egypt/core/utils/svg_icon.dart';
+import 'package:solar_icons/solar_icons.dart';
 
 class OrderButton extends StatelessWidget {
   const OrderButton({super.key});
@@ -22,16 +23,20 @@ class OrderButton extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(100),
                 ),
-                padding: EdgeInsets.zero, // Remove internal padding
+                padding: EdgeInsets.zero, 
               ),
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: const Row(
+                child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
-                    Text('Request order', style: Styles.textStyle16),
+                  children: [
+                    Text(
+                      'Edit',
+                      style: Styles.textStyle16c7
+                          .copyWith(color: AppColors.newBeige),
+                    ),
                     SvgIcon(
-                      path: 'assets/images/incline arrow.svg',
+                      path: 'assets/images/edit.svg',
                       height: 24,
                       width: 24,
                     ),
@@ -41,7 +46,17 @@ class OrderButton extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 16),
-          SvgIcon(path: 'assets/images/save circle.svg', width: 52, height: 52)
+          Container(
+            width: 52,
+            height: 52,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(color: AppColors.primary, width: 1),
+            ),
+            child: Center(
+              child: Icon(SolarIconsOutline.bookmark),
+            ),
+          )
         ],
       ),
     );

@@ -3,7 +3,6 @@ import 'package:buy_from_egypt/features/marketplace/presentation/widgets/product
 import 'package:buy_from_egypt/features/marketplace/presentation/widgets/product_info_section.dart';
 import 'package:flutter/material.dart';
 import 'package:buy_from_egypt/core/utils/app_colors.dart';
-import 'package:buy_from_egypt/core/utils/styles.dart';
 import 'package:buy_from_egypt/features/home/presentation/widgets/bottom_navigation_bar.dart';
 import 'package:buy_from_egypt/features/auth/presentation/widgets/back_button.dart';
 
@@ -26,25 +25,21 @@ class ProductInfoView extends StatefulWidget {
 class _ProductInfoViewState extends State<ProductInfoView> {
   int _selectedColorIndex = 0;
   int _currentPage = 0;
-
-  final List<String> productImages = [
-    'assets/images/buy from egypt logo m 1.png',
-    'assets/images/buy from egypt logo m 1.png',
-    'assets/images/buy from egypt logo m 1.png',
-    'assets/images/buy from egypt logo m 1.png',
-  ];
+  bool _isDescriptionExpanded = false;
 
   final List<Color> availableColors = [
     AppColors.primary,
     AppColors.waring,
     AppColors.danger,
   ];
-  final String productName = "Air Force Shoes";
-  final double productPrice = 6.50;
-  final String productDescription =
-      "The Nike Air Force 1 is a timeless sneaker that combines classic design with modern comfort. Crafted with premium leather and ";
 
   final PageController _pageController = PageController();
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -81,18 +76,27 @@ class _ProductInfoViewState extends State<ProductInfoView> {
             _buildCarousel(screenSize),
             ProductDotIndicator(
               currentIndex: _currentPage,
-              count: productImages.length,
+              count: widget.product.images.isNotEmpty ? widget.product.images.length : 1,
             ),
             ProductInfoSection(
-              productName: productName,
-              productPrice: productPrice,
-              productDescription: productDescription,
+              productName: widget.product.name,
+              productPrice: widget.product.price,
+              productDescription: widget.product.description,
               availableColors: availableColors,
               onColorSelected: (index) {
-                // Handle color selection
-                print("Color selected: $index");
+                setState(() {
+                  _selectedColorIndex = index;
+                });
               },
               screenSize: screenSize,
+              currencyCode: widget.product.currencyCode,
+              selectedColorIndex: _selectedColorIndex,
+              isDescriptionExpanded: _isDescriptionExpanded,
+              onReadMoreTap: () {
+                setState(() {
+                  _isDescriptionExpanded = !_isDescriptionExpanded;
+                });
+              },
             ),
           ],
         ),
@@ -114,17 +118,35 @@ class _ProductInfoViewState extends State<ProductInfoView> {
   }
 
   Widget _buildCarousel(Size screenSize) {
+    if (widget.product.images.isEmpty) {
+      return Expanded(
+        flex: 5,
+        child: Center(
+          child: Icon(
+            Icons.image_not_supported,
+            size: screenSize.height * 0.2,
+            color: Colors.grey,
+          ),
+        ),
+      );
+    }
+
     return Expanded(
       flex: 5,
       child: PageView.builder(
         controller: _pageController,
-        itemCount: productImages.length,
+        itemCount: widget.product.images.length,
         onPageChanged: (index) => setState(() => _currentPage = index),
         itemBuilder: (context, index) => Center(
-          child: Image.asset(
-            productImages[index],
+          child: Image.network(
+            widget.product.images[index],
             height: screenSize.height * 0.28,
             fit: BoxFit.contain,
+            errorBuilder: (context, error, stackTrace) {
+              return const Center(
+                child: Icon(Icons.image_not_supported, size: 40),
+              );
+            },
           ),
         ),
       ),

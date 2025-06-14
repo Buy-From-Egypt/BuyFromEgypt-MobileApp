@@ -1,3 +1,4 @@
+import 'package:buy_from_egypt/core/utils/app_colors.dart';
 import 'package:buy_from_egypt/features/marketplace/presentation/widgets/order_button.dart';
 import 'package:flutter/material.dart';
 import 'package:buy_from_egypt/core/utils/styles.dart';
@@ -9,6 +10,10 @@ class ProductInfoSection extends StatelessWidget {
   final List<Color> availableColors;
   final ValueChanged<int> onColorSelected;
   final Size screenSize;
+  final String currencyCode;
+  final int selectedColorIndex;
+  final bool isDescriptionExpanded;
+  final VoidCallback onReadMoreTap;
 
   const ProductInfoSection({
     super.key,
@@ -18,6 +23,10 @@ class ProductInfoSection extends StatelessWidget {
     required this.availableColors,
     required this.onColorSelected,
     required this.screenSize,
+    required this.currencyCode,
+    required this.selectedColorIndex,
+    required this.isDescriptionExpanded,
+    required this.onReadMoreTap,
   });
 
   @override
@@ -35,13 +44,13 @@ class ProductInfoSection extends StatelessWidget {
           borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
         ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Expanded(child: _buildProductDetails()),
             Padding(
               padding: EdgeInsets.only(bottom: screenSize.height * 0.01),
-              child: const OrderButton(),
+              child: OrderButton(),
             ),
           ],
         ),
@@ -52,12 +61,12 @@ class ProductInfoSection extends StatelessWidget {
   Widget _buildProductDetails() {
     return SingleChildScrollView(
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           _buildNameAndPrice(),
-          SizedBox(height: screenSize.height * 0.02),
+          SizedBox(height: 24),
           _buildDescriptionAndColors(),
-          SizedBox(height: screenSize.height * 0.01),
+          SizedBox(height: 8),
           _buildDescriptionText(),
         ],
       ),
@@ -72,14 +81,16 @@ class ProductInfoSection extends StatelessWidget {
           child: Text(
             productName,
             style: Styles.textStyle166pr.copyWith(
+              fontWeight: FontWeight.bold,
               fontSize: screenSize.width * 0.045,
             ),
             overflow: TextOverflow.ellipsis,
           ),
         ),
         Text(
-          "\$${productPrice} USD",
+          "$productPrice $currencyCode",
           style: Styles.textStyle14.copyWith(
+            color: AppColors.primary,
             fontSize: screenSize.width * 0.04,
           ),
         ),
@@ -92,8 +103,10 @@ class ProductInfoSection extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          "Descriptions",
+          "Description",
           style: Styles.textStyle14.copyWith(
+            fontWeight: FontWeight.w600,
+            color: AppColors.primary,
             fontSize: screenSize.width * 0.04,
           ),
         ),
@@ -110,8 +123,8 @@ class ProductInfoSection extends StatelessWidget {
                   shape: BoxShape.circle,
                   color: availableColors[index],
                   border: Border.all(
-                    color: Colors.black,
-                    width: 1.5,
+                    color: selectedColorIndex == index ? AppColors.primary : Colors.transparent,
+                    width: 2,
                   ),
                 ),
               ),
@@ -123,26 +136,42 @@ class ProductInfoSection extends StatelessWidget {
   }
 
   Widget _buildDescriptionText() {
-    return RichText(
-      text: TextSpan(
-        children: [
-          TextSpan(
-            text: productDescription.isNotEmpty
-                ? productDescription
-                : "This is a premium quality product, crafted with excellence and attention to detail. Perfect for your needs. ",
-            style: Styles.textStyle14c7.copyWith(
-              fontSize: screenSize.width * 0.035,
+    final showReadMore = productDescription.length > 100 || productDescription.split('\n').length > 3;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          productDescription.isNotEmpty ? productDescription : "No description available.",
+          style: Styles.textStyle14c7.copyWith(
+            color: AppColors.c16,
+            fontSize: screenSize.width * 0.035,
+          ),
+          maxLines: isDescriptionExpanded ? null : 3,
+          overflow: isDescriptionExpanded ? TextOverflow.visible : TextOverflow.ellipsis,
+        ),
+        if (showReadMore && !isDescriptionExpanded)
+          GestureDetector(
+            onTap: onReadMoreTap,
+            child: Text(
+              "Read more",
+              style: Styles.textStyle14info.copyWith(
+                fontSize: screenSize.width * 0.035,
+                decoration: TextDecoration.underline,
+              ),
             ),
           ),
-          TextSpan(
-            text: "Read more",
-            style: Styles.textStyle14info.copyWith(
-              fontSize: screenSize.width * 0.035,
+        if (showReadMore && isDescriptionExpanded)
+          GestureDetector(
+            onTap: onReadMoreTap,
+            child: Text(
+              "Show less",
+              style: Styles.textStyle14info.copyWith(
+                fontSize: screenSize.width * 0.035,
+                decoration: TextDecoration.underline,
+              ),
             ),
-            // Implement "Read more" action here
           ),
-        ],
-      ),
+      ],
     );
   }
 }

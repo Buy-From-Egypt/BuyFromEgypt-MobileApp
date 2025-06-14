@@ -14,7 +14,7 @@ class CustomBackButton extends StatelessWidget {
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         border: Border.all(
-          color: AppColors.c5,
+          color: AppColors.primary,
           width: 1,
         ),
       ),
@@ -23,7 +23,7 @@ class CustomBackButton extends StatelessWidget {
           icon: const FaIcon(
             SolarIconsOutline.arrowLeft,
             size: 18,
-            color: AppColors.background,
+            color: AppColors.primary,
           ),
           onPressed: () {
             Navigator.pop(context);

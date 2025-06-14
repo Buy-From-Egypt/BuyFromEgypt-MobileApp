@@ -1,4 +1,5 @@
 import 'package:buy_from_egypt/core/utils/app_colors.dart';
+import 'package:buy_from_egypt/core/utils/app_routes.dart';
 import 'package:buy_from_egypt/core/utils/styles.dart';
 import 'package:buy_from_egypt/core/utils/svg_icon.dart';
 import 'package:flutter/material.dart';
@@ -22,27 +23,24 @@ class MarketplaceFilterRow extends StatelessWidget {
               Expanded(
                 child: GestureDetector(
                   onTap: () {
-                    // TODO: Add your custom dropdown or modal logic here
+                    Navigator.pushNamed(context, AppRoutes.addProduct);
                   },
                   child: Container(
                     height: 38,
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     decoration: BoxDecoration(
-                      color: AppColors.c7,
+                      border: Border.all(color: AppColors.primary),
+                      color: AppColors.newBeige,
                       borderRadius: BorderRadius.circular(25),
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'My Product',
-                          style: Styles.textStyle14back,
+                          'Add product',
+                          style: Styles.textStyle16,
                         ),
-                        const Icon(
-                          Icons.expand_more,
-                          color: AppColors.background,
-                          size: 20,
-                        ),
+                       SvgIcon(path: 'assets/images/plus.svg', width: 18, height: 18),
                       ],
                     ),
                   ),
@@ -53,14 +51,19 @@ class MarketplaceFilterRow extends StatelessWidget {
                 height: 38,
                 width: 70,
                 decoration: BoxDecoration(
-                  color: AppColors.c7,
-                  borderRadius: BorderRadius.circular(25),
+                  border: Border.all(color: AppColors.primary),
+                  shape: BoxShape.circle,
                 ),
-                child: const Center(
-                  child: SvgIcon(
-                    path: 'assets/images/sort.svg',
-                    height: 14.62,
-                    width: 16.13,
+                child: Center(
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context, AppRoutes.filter);
+                    },
+                    child: SvgIcon(
+                      path: 'assets/images/Filter.svg',
+                      height: 18,
+                      width: 18,
+                    ),
                   ),
                 ),
               ),

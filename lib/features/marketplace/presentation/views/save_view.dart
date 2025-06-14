@@ -1,20 +1,22 @@
 import 'package:buy_from_egypt/core/utils/app_colors.dart';
+import 'package:buy_from_egypt/core/utils/app_routes.dart';
 import 'package:buy_from_egypt/core/utils/styles.dart';
-import 'package:buy_from_egypt/features/home/presentation/widgets/bottom_navigation_bar.dart';
+import 'package:buy_from_egypt/features/home/presentation/widgets/bottom_navigation_bar.dart'
+    show CustomBottomNavigationBar, NavItem;
 import 'package:buy_from_egypt/features/marketplace/presentation/widgets/custom_app_bar_market.dart';
 import 'package:buy_from_egypt/features/marketplace/presentation/widgets/order2_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class Order1View extends StatefulWidget {
-  const Order1View({super.key});
-
+class SaveView extends StatefulWidget {
+  final VoidCallback? onPressed;
+  const SaveView({super.key, this.onPressed});
   @override
-  State<Order1View> createState() => _Order1ViewState();
+  State<SaveView> createState() => _SaveViewState();
 }
 
-class _Order1ViewState extends State<Order1View> {
-  int currentIndex = 2;
+class _SaveViewState extends State<SaveView> {
+  int currentIndex = 0;
 
   final List<NavItem> navItems = [
     NavItem(
@@ -34,7 +36,6 @@ class _Order1ViewState extends State<Order1View> {
         activeIconPath: 'assets/images/user_b.svg',
         inactiveIconPath: 'assets/images/user.svg'),
   ];
-
   late double width;
   late double height;
 
@@ -43,10 +44,9 @@ class _Order1ViewState extends State<Order1View> {
     final size = MediaQuery.of(context).size;
     width = size.width;
     height = size.height;
-
     return Scaffold(
       backgroundColor: AppColors.white,
-      appBar: CustomAppBarMarket(title: 'Orders'),
+      appBar: CustomAppBarMarket(title: 'Saves'),
       bottomNavigationBar: CustomBottomNavigationBar(
         items: navItems,
         currentIndex: currentIndex,
@@ -56,13 +56,17 @@ class _Order1ViewState extends State<Order1View> {
         child: Column(
           children: [
             buildDivider(),
-            buildItemsCount(),
             SizedBox(height: height * 0.12),
-            buildEmptyOrderImage(imagePath: 'assets/images/order_image.svg'),
-            SizedBox(height: height * 0.03),
+            buildEmptyOrderImage(imagePath: 'assets/images/Empty bookmark.svg'),
+            SizedBox(height: height * 0.05),
             buildEmptyOrderTexts(),
-            SizedBox(height: height * 0.08),
-            const Orders1Button(text: 'Add a new product',),
+            SizedBox(height: height * 0.15),
+            Orders1Button(
+              text: 'Explore Marketplace',
+              onPressed: () {
+                Navigator.pushNamed(context, AppRoutes.market);
+              },
+            ),
           ],
         ),
       ),
@@ -74,21 +78,6 @@ class _Order1ViewState extends State<Order1View> {
       color: AppColors.c5,
       thickness: 1,
       height: 1,
-    );
-  }
-
-  Widget buildItemsCount() {
-    return Padding(
-      padding: EdgeInsets.symmetric(
-        horizontal: width * 0.03,
-        vertical: height * 0.015,
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: const [
-          Text('(0) items'),
-        ],
-      ),
     );
   }
 
@@ -104,7 +93,7 @@ class _Order1ViewState extends State<Order1View> {
     return Column(
       children: [
         Text(
-          'No Orders Yet?',
+          'No saved products yet!',
           style: Styles.textStyle22b,
           textAlign: TextAlign.center,
         ),
@@ -112,7 +101,7 @@ class _Order1ViewState extends State<Order1View> {
         Padding(
           padding: EdgeInsets.symmetric(horizontal: width * 0.06),
           child: Text(
-            'Think of this as the calm before the export boom!',
+            'Start exploring and save the products',
             style: Styles.textStyle14b,
             textAlign: TextAlign.center,
           ),
@@ -121,7 +110,7 @@ class _Order1ViewState extends State<Order1View> {
         Padding(
           padding: EdgeInsets.symmetric(horizontal: width * 0.12),
           child: Text(
-            'Stay ready, and the right buyers will come knocking.',
+            'you like to find them here later',
             style: Styles.textStyle14b,
             textAlign: TextAlign.center,
           ),

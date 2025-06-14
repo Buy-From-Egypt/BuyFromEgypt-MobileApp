@@ -14,4 +14,7 @@ class AppRoutes {
   static const String market = '/marketView';
   static const String orders1 = '/orders1View';
   static const String orders2 = '/orders2View';
+  static const String filter = '/filterView';
+  static const String addProduct = '/addProductView';
+  static const String save = '/saveView';
 }

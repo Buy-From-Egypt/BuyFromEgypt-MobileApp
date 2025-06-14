@@ -10,9 +10,12 @@ import 'package:buy_from_egypt/features/auth/presentation/views/successfully_vie
 import 'package:buy_from_egypt/features/auth/presentation/views/update_password_view.dart';
 import 'package:buy_from_egypt/features/home/presentation/views/home_view.dart';
 import 'package:buy_from_egypt/features/home/presentation/views/search_view.dart';
+import 'package:buy_from_egypt/features/marketplace/presentation/views/add_product_view.dart';
+import 'package:buy_from_egypt/features/marketplace/presentation/views/filter_view.dart';
 import 'package:buy_from_egypt/features/marketplace/presentation/views/market_view.dart';
 import 'package:buy_from_egypt/features/marketplace/presentation/views/order1_view.dart';
 import 'package:buy_from_egypt/features/marketplace/presentation/views/order2_view.dart';
+import 'package:buy_from_egypt/features/marketplace/presentation/views/save_view.dart';
 import 'package:buy_from_egypt/features/onboarding/presentation/views/onboarding_screens.dart';
 import 'package:buy_from_egypt/features/splash/presentation/views/splash_view.dart';
 import 'package:flutter/material.dart';
@@ -128,6 +131,9 @@ class MyApp extends StatelessWidget {
           return PendingView(email: email);
         },
         AppRoutes.search: (context) => const SearchView(),
+        AppRoutes.filter: (context)=> const FilterView(),
+        AppRoutes.addProduct: (context) => const AddProductView(),
+        AppRoutes.save: (context) =>  SaveView(),
       },
     );
   }

@@ -1,4 +1,3 @@
-
 import 'package:buy_from_egypt/features/marketplace/presentation/data/product_model.dart';
 import 'package:buy_from_egypt/features/marketplace/presentation/widgets/product_card.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +9,11 @@ class MarketplaceProductGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('Building ProductGrid with ${products.length} products');
+    if (products.isNotEmpty) {
+      print('First product in grid: ${products.first.name}');
+    }
+
     return GridView.builder(
       padding: const EdgeInsets.only(bottom: 16),
       itemCount: products.length,
@@ -20,7 +24,8 @@ class MarketplaceProductGrid extends StatelessWidget {
         childAspectRatio: 0.72,
       ),
       itemBuilder: (context, index) {
-        return ProductCard(product: products[index]);
+        final product = products[index];
+        return ProductCard(product: product);
       },
     );
   }
