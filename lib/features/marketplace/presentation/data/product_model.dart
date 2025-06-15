@@ -53,17 +53,27 @@ class Product {
       currencyCode: json['currencyCode'] ?? 'EGP',
       active: json['active'] ?? false,
       available: json['available'] ?? false,
-      rating: (json['rating'] is num) ? (json['rating'] as num).toDouble() : 0.0,
+      rating:
+          (json['rating'] is num) ? (json['rating'] as num).toDouble() : 0.0,
       reviewCount: json['reviewCount'] ?? 0,
       cloudFolder: json['cloudFolder'] ?? '',
       ownerId: json['ownerId'] ?? '',
       categoryId: json['categoryId'] ?? '',
       approvedById: json['approvedById'],
-      approvedAt: json['approvedAt'] != null ? DateTime.parse(json['approvedAt']) : null,
-      createdAt: json['createdAt'] != null ? DateTime.parse(json['createdAt']) : DateTime.now(),
-      updatedAt: json['updatedAt'] != null ? DateTime.parse(json['updatedAt']) : DateTime.now(),
-      images: json['images'] != null
-          ? List<String>.from(json['images'].map((img) => img['url'] ?? ''))
+      approvedAt: json['approvedAt'] != null
+          ? DateTime.parse(json['approvedAt'])
+          : null,
+      createdAt: json['createdAt'] != null
+          ? DateTime.parse(json['createdAt'])
+          : DateTime.now(),
+      updatedAt: json['updatedAt'] != null
+          ? DateTime.parse(json['updatedAt'])
+          : DateTime.now(),
+      images: json['images'] != null && json['images'] is List
+          ? (json['images'] as List)
+              .where((img) => img is Map && img['url'] != null)
+              .map<String>((img) => img['url'] as String)
+              .toList()
           : [],
       owner: json['owner'] != null
           ? Owner.fromJson(json['owner'])

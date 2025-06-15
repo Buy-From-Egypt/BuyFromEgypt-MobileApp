@@ -13,8 +13,11 @@ class ProductService {
       final response = await http.get(Uri.parse('$baseUrl/products'));
 
       if (response.statusCode == 200) {
-        final List<dynamic> productsList = json.decode(response.body);
-        return productsList.map((productJson) => Product.fromJson(productJson)).toList();
+        final decodedBody = json.decode(response.body);
+        final List<dynamic> productsList = decodedBody['data'];
+        return productsList
+            .map((productJson) => Product.fromJson(productJson))
+            .toList();
       } else {
         throw Exception('Failed to load products: ${response.statusCode}');
       }
@@ -25,7 +28,8 @@ class ProductService {
 
   static Future<Product> getProductById(String productId) async {
     try {
-      final response = await http.get(Uri.parse('$baseUrl/products/$productId'));
+      final response =
+          await http.get(Uri.parse('$baseUrl/products/$productId'));
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> productData = json.decode(response.body);
@@ -40,10 +44,13 @@ class ProductService {
 
   static Future<List<Category>> getAllCategories() async {
     try {
-      final response = await _dio.get('$baseUrl/category'); // Assuming /category is the endpoint
+      final response = await _dio
+          .get('$baseUrl/category'); // Assuming /category is the endpoint
       if (response.statusCode == 200) {
         final List<dynamic> categoriesList = response.data;
-        return categoriesList.map((categoryJson) => Category.fromJson(categoryJson)).toList();
+        return categoriesList
+            .map((categoryJson) => Category.fromJson(categoryJson))
+            .toList();
       } else {
         throw Exception('Failed to load categories: ${response.statusCode}');
       }
@@ -87,8 +94,9 @@ class ProductService {
 
       if (image != null) {
         formData.files.add(MapEntry(
-          'images', // This should match the backend field name for images
-          await MultipartFile.fromFile(image.path, filename: image.path.split('/').last),
+          'images',
+          await MultipartFile.fromFile(image.path,
+              filename: image.path.split('/').last),
         ));
       }
 
@@ -101,7 +109,8 @@ class ProductService {
       if (response.statusCode == 201) {
         print('Product created: ${response.data}');
       } else {
-        throw Exception('Failed to create product: ${response.statusCode} - ${response.data}');
+        throw Exception(
+            'Failed to create product: ${response.statusCode} - ${response.data}');
       }
     } catch (e) {
       throw Exception('Failed to create product: $e');

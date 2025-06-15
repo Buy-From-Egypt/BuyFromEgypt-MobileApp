@@ -17,4 +17,5 @@ class AppRoutes {
   static const String filter = '/filterView';
   static const String addProduct = '/addProductView';
   static const String save = '/saveView';
+  static const String history = '/historyView';
 }
