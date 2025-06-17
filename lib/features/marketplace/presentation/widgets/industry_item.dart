@@ -5,11 +5,13 @@ import 'package:flutter/material.dart';
 class IndustryItem extends StatefulWidget {
   final String title;
   final String count;
+  final VoidCallback? onTap;
 
   const IndustryItem({
     super.key,
     required this.title,
     required this.count,
+    this.onTap,
   });
 
   @override
@@ -22,7 +24,10 @@ class _IndustryItemState extends State<IndustryItem> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => setState(() => selected = !selected),
+      onTap: () {
+        setState(() => selected = !selected);
+        widget.onTap?.call();
+      },
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 6),
         child: Row(

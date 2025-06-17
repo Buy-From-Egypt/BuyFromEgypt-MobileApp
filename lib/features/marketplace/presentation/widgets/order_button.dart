@@ -3,9 +3,81 @@ import 'package:flutter/material.dart';
 import 'package:buy_from_egypt/core/utils/app_colors.dart';
 import 'package:buy_from_egypt/core/utils/svg_icon.dart';
 import 'package:solar_icons/solar_icons.dart';
+import 'package:buy_from_egypt/features/marketplace/presentation/services/saved_products_service.dart';
 
-class OrderButton extends StatelessWidget {
-  const OrderButton({super.key});
+class OrderButton extends StatefulWidget {
+  final String productId;
+  final VoidCallback? onSavedProductsUpdated;
+
+  const OrderButton({
+    super.key,
+    required this.productId,
+    this.onSavedProductsUpdated,
+  });
+
+  @override
+  State<OrderButton> createState() => _OrderButtonState();
+}
+
+class _OrderButtonState extends State<OrderButton> {
+  bool _isSaved = false;
+  bool _isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkSavedStatus();
+  }
+
+  Future<void> _checkSavedStatus() async {
+    try {
+      final isSaved = await SavedProductsService.isProductSaved(widget.productId);
+      if (mounted) {
+        setState(() {
+          _isSaved = isSaved;
+        });
+      }
+    } catch (e) {
+      print('Error checking saved status: $e');
+    }
+  }
+
+  Future<void> _toggleSave() async {
+    if (_isLoading) return;
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      if (_isSaved) {
+        await SavedProductsService.unsaveProduct(widget.productId);
+      } else {
+        await SavedProductsService.saveProduct(widget.productId);
+      }
+
+      if (mounted) {
+        setState(() {
+          _isSaved = !_isSaved;
+        });
+        widget.onSavedProductsUpdated?.call();
+      }
+    } catch (e) {
+      print('Error toggling save status: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(_isSaved ? 'Failed to unsave product' : 'Failed to save product'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,10 +123,28 @@ class OrderButton extends StatelessWidget {
             height: 52,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              border: Border.all(color: AppColors.primary, width: 1),
+              border: Border.all(
+                color: _isSaved ? AppColors.primary : AppColors.primary,
+                width: 1,
+              ),
             ),
             child: Center(
-              child: Icon(SolarIconsOutline.bookmark),
+              child: _isLoading
+                  ? const SizedBox(
+                      width: 24,
+                      height: 24,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
+                      ),
+                    )
+                  : IconButton(
+                      icon: Icon(
+                        _isSaved ? SolarIconsBold.bookmark : SolarIconsOutline.bookmark,
+                        color: _isSaved ? AppColors.primary : AppColors.primary,
+                      ),
+                      onPressed: _toggleSave,
+                    ),
             ),
           )
         ],

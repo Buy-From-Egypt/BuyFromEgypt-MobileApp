@@ -116,4 +116,86 @@ class ProductService {
       throw Exception('Failed to create product: $e');
     }
   }
+
+  static Future<List<Product>> getAllProductsByFilter({
+    String? categoryId,
+    double? minPrice,
+    double? maxPrice,
+    String? sortBy,
+    String? sortOrder,
+    bool? available,
+    String? currencyCode,
+    bool? active,
+    int? page,
+    int? limit,
+  }) async {
+    try {
+      final Map<String, dynamic> queryParams = {};
+      if (categoryId != null) queryParams['categoryId'] = categoryId;
+      if (minPrice != null) queryParams['minPrice'] = minPrice;
+      if (maxPrice != null) queryParams['maxPrice'] = maxPrice;
+      if (sortBy != null) queryParams['sortBy'] = sortBy;
+      if (sortOrder != null) queryParams['sortOrder'] = sortOrder;
+      if (available != null) queryParams['available'] = available;
+      if (currencyCode != null) queryParams['currencyCode'] = currencyCode;
+      if (active != null) queryParams['active'] = active;
+      if (page != null) queryParams['page'] = page;
+      if (limit != null) queryParams['limit'] = limit;
+
+      final uri = Uri.parse('$baseUrl/products').replace(queryParameters: queryParams.map((key, value) => MapEntry(key, value.toString())));
+      print('getAllProductsByFilter - Request URL: $uri');
+
+      final response = await http.get(uri);
+      print('getAllProductsByFilter - Response Status Code: ${response.statusCode}');
+      print('getAllProductsByFilter - Response Body: ${response.body}');
+
+      if (response.statusCode == 200) {
+        final decodedBody = json.decode(response.body);
+        final List<dynamic> productsList = decodedBody['data'];
+        return productsList
+            .map((productJson) => Product.fromJson(productJson))
+            .toList();
+      } else {
+        throw Exception('Failed to load filtered products: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Failed to load filtered products: $e');
+    }
+  }
+
+  static Future<List<CategoryWithCount>> getCategoriesWithProductCount() async {
+    try {
+      final response = await _dio.get('$baseUrl/products/categories-with-count');
+      if (response.statusCode == 200) {
+        final List<dynamic> categoriesList = response.data;
+        return categoriesList
+            .map((categoryJson) => CategoryWithCount.fromJson(categoryJson))
+            .toList();
+      } else {
+        throw Exception('Failed to load categories with count: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Failed to load categories with count: $e');
+    }
+  }
+}
+
+class CategoryWithCount {
+  final String categoryId;
+  final String name;
+  final int productCount;
+
+  CategoryWithCount({
+    required this.categoryId,
+    required this.name,
+    required this.productCount,
+  });
+
+  factory CategoryWithCount.fromJson(Map<String, dynamic> json) {
+    return CategoryWithCount(
+      categoryId: json['categoryId'],
+      name: json['name'],
+      productCount: json['productCount'],
+    );
+  }
 }

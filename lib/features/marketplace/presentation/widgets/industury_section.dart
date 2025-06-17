@@ -2,9 +2,14 @@ import 'package:buy_from_egypt/core/utils/app_colors.dart';
 import 'package:buy_from_egypt/core/utils/styles.dart';
 import 'package:flutter/material.dart';
 import 'industry_item.dart';
+import 'package:buy_from_egypt/features/marketplace/presentation/services/product_service.dart';
 
 class IndustrySection extends StatefulWidget {
-  const IndustrySection({super.key});
+  final List<CategoryWithCount> categories;
+  final Function(String)? onCategorySelected;
+  final bool isLoading;
+
+  const IndustrySection({super.key, required this.categories, this.onCategorySelected, this.isLoading = false});
 
   @override
   State<IndustrySection> createState() => _IndustrySectionState();
@@ -12,17 +17,6 @@ class IndustrySection extends StatefulWidget {
 
 class _IndustrySectionState extends State<IndustrySection> {
   bool isExpanded = true;
-
-  final List<Map<String, String>> industries = const [
-    {'title': 'Agriculture & Food', 'count': '300'},
-    {'title': 'Manufacturing & Industrial', 'count': '50'},
-    {'title': 'Consumer Goods & Retail', 'count': '50'},
-    {'title': 'Energy & Natural Resources', 'count': '50'},
-    {'title': 'Pharmaceuticals', 'count': '50'},
-    {'title': 'Technology & Electronics', 'count': '50'},
-    {'title': 'Automotive', 'count': '50'},
-    {'title': 'Construction & Real Estate', 'count': '50'},
-  ];
 
   void _toggleExpanded() {
     setState(() => isExpanded = !isExpanded);
@@ -58,14 +52,25 @@ class _IndustrySectionState extends State<IndustrySection> {
           curve: Curves.easeInOut,
           child: isExpanded
               ? Column(
-                  children: [ 
+                  children: [
                     const SizedBox(height: 18),
-                    ...industries.map(
-                      (item) => IndustryItem(
-                        title: item['title']!,
-                        count: item['count']!,
+                    ...widget.categories.map(
+                      (category) => IndustryItem(
+                        title: category.name,
+                        count: category.productCount.toString(),
+                        onTap: () {
+                          widget.onCategorySelected?.call(category.categoryId);
+                        },
                       ),
                     ).toList(),
+                    if (widget.isLoading) ...[
+                      const Padding(
+                        padding: EdgeInsets.only(top: 8.0),
+                        child: LinearProgressIndicator(
+                          color: AppColors.primary,
+                        ),
+                      ),
+                    ],
                   ],
                 )
               : const SizedBox.shrink(),

@@ -14,6 +14,8 @@ class ProductInfoSection extends StatelessWidget {
   final int selectedColorIndex;
   final bool isDescriptionExpanded;
   final VoidCallback onReadMoreTap;
+  final String productId;
+  final VoidCallback? onSavedProductsUpdated;
 
   const ProductInfoSection({
     super.key,
@@ -27,6 +29,8 @@ class ProductInfoSection extends StatelessWidget {
     required this.selectedColorIndex,
     required this.isDescriptionExpanded,
     required this.onReadMoreTap,
+    required this.productId,
+    this.onSavedProductsUpdated,
   });
 
   @override
@@ -50,7 +54,10 @@ class ProductInfoSection extends StatelessWidget {
             Expanded(child: _buildProductDetails()),
             Padding(
               padding: EdgeInsets.only(bottom: screenSize.height * 0.01),
-              child: OrderButton(),
+              child: OrderButton(
+                productId: productId,
+                onSavedProductsUpdated: onSavedProductsUpdated,
+              ),
             ),
           ],
         ),

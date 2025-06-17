@@ -17,8 +17,9 @@ class Product {
   final DateTime createdAt;
   final DateTime updatedAt;
   final List<String> images;
-  final Owner owner;
-  final Category category;
+  final Owner? owner;
+  final Category? category;
+  final String? userUserId;
 
   Product({
     required this.productId,
@@ -38,9 +39,10 @@ class Product {
     this.approvedAt,
     required this.createdAt,
     required this.updatedAt,
-    required this.images,
-    required this.owner,
-    required this.category,
+    this.images = const [],
+    this.owner,
+    this.category,
+    this.userUserId,
   });
 
   factory Product.fromJson(Map<String, dynamic> json) {
@@ -53,8 +55,7 @@ class Product {
       currencyCode: json['currencyCode'] ?? 'EGP',
       active: json['active'] ?? false,
       available: json['available'] ?? false,
-      rating:
-          (json['rating'] is num) ? (json['rating'] as num).toDouble() : 0.0,
+      rating: (json['rating'] is num) ? (json['rating'] as num).toDouble() : 0.0,
       reviewCount: json['reviewCount'] ?? 0,
       cloudFolder: json['cloudFolder'] ?? '',
       ownerId: json['ownerId'] ?? '',
@@ -69,28 +70,52 @@ class Product {
       updatedAt: json['updatedAt'] != null
           ? DateTime.parse(json['updatedAt'])
           : DateTime.now(),
-      images: json['images'] != null && json['images'] is List
-          ? (json['images'] as List)
-              .where((img) => img is Map && img['url'] != null)
-              .map<String>((img) => img['url'] as String)
-              .toList()
+      images: json['images'] != null
+          ? (json['images'] is List
+              ? (json['images'] as List).map<String>((img) {
+                  if (img is String) return img;
+                  if (img is Map) {
+                    if (img['url'] != null) return img['url'] as String;
+                    if (img['imageUrl'] != null) return img['imageUrl'] as String;
+                  }
+                  return '';
+                }).where((url) => url.isNotEmpty).toList()
+              : [])
           : [],
       owner: json['owner'] != null
           ? Owner.fromJson(json['owner'])
-          : Owner(
-              userId: '',
-              name: 'Unknown',
-              email: '',
-              role: 'user',
-            ),
+          : null,
       category: json['category'] != null
           ? Category.fromJson(json['category'])
-          : Category(
-              categoryId: '',
-              name: 'Uncategorized',
-              description: '',
-            ),
+          : null,
+      userUserId: json['userUserId'],
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'productId': productId,
+      'name': name,
+      'slug': slug,
+      'description': description,
+      'price': price,
+      'currencyCode': currencyCode,
+      'active': active,
+      'available': available,
+      'rating': rating,
+      'reviewCount': reviewCount,
+      'cloudFolder': cloudFolder,
+      'ownerId': ownerId,
+      'categoryId': categoryId,
+      'approvedById': approvedById,
+      'approvedAt': approvedAt?.toIso8601String(),
+      'createdAt': createdAt.toIso8601String(),
+      'updatedAt': updatedAt.toIso8601String(),
+      'images': images,
+      'owner': owner?.toJson(),
+      'category': category?.toJson(),
+      'userUserId': userUserId,
+    };
   }
 }
 
@@ -115,6 +140,15 @@ class Owner {
       role: json['role'] ?? 'user',
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'userId': userId,
+      'name': name,
+      'email': email,
+      'role': role,
+    };
+  }
 }
 
 class Category {
@@ -134,5 +168,13 @@ class Category {
       name: json['name'] ?? 'Uncategorized',
       description: json['description'] ?? '',
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'categoryId': categoryId,
+      'name': name,
+      'description': description,
+    };
   }
 }

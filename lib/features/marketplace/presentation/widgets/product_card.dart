@@ -14,7 +14,7 @@ class ProductCard extends StatelessWidget {
     print('Building ProductCard for: ${product.name}');
     print('Product details:');
     print('- Price: ${product.price} ${product.currencyCode}');
-    print('- Category: ${product.category.name}');
+    print('- Category: ${product.category?.name ?? 'Uncategorized'}');
     print('- Images: ${product.images.length}');
 
     return GestureDetector(
@@ -67,7 +67,7 @@ class ProductCard extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            product.category.name,
+            product.category?.name ?? 'Uncategorized',
             style: const TextStyle(fontSize: 12, color: Colors.grey),
           ),
           const SizedBox(height: 2),

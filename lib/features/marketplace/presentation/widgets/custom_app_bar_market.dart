@@ -3,6 +3,7 @@ import 'package:buy_from_egypt/core/utils/styles.dart';
 import 'package:buy_from_egypt/core/utils/svg_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:solar_icons/solar_icons.dart';
 
 class CustomAppBarMarket extends StatelessWidget
     implements PreferredSizeWidget {
@@ -34,6 +35,16 @@ class CustomAppBarMarket extends StatelessWidget
             'assets/images/search.svg',
             height: 24,
             width: 24,
+          ),
+        ),
+        const SizedBox(width: 16),
+        GestureDetector(
+          onTap: () {
+            Navigator.pushNamed(context, AppRoutes.save);
+          },
+          child: const Icon(
+            SolarIconsOutline.bookmark,
+            size: 24,
           ),
         ),
         const SizedBox(width: 16),

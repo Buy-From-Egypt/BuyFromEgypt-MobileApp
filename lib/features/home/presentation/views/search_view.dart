@@ -102,7 +102,9 @@ class _SearchViewState extends State<SearchView> {
             ),
           ),
           _isLoading
-              ? const Center(child: CircularProgressIndicator())
+              ? const Center(child: CircularProgressIndicator(
+                color: AppColors.primary,
+              ))
               : _error != null
                   ? Center(child: Text(_error!))
                   : Expanded(
@@ -113,7 +115,7 @@ class _SearchViewState extends State<SearchView> {
                           final user = _searchResults[index];
                           return CustomSearchItem(
                             userName: user.name,
-                            userImage: 'assets/images/samsun.png', // Placeholder image
+                            userImage: user.profileImage ?? 'assets/images/download.jpeg',
                           );
                         },
                       ),

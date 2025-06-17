@@ -79,6 +79,13 @@ class _MarketViewState extends State<MarketView> {
     }
   }
 
+  void _onFilterApplied(List<Product> filteredProducts) {
+    print('_MarketViewState - _onFilterApplied called with ${filteredProducts.length} products');
+    setState(() {
+      products = filteredProducts;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     print('Building MarketView with isLoading: $isLoading, error: $error, products count: ${products.length}');
@@ -94,7 +101,7 @@ class _MarketViewState extends State<MarketView> {
         onRefresh: _loadProducts,
         child: Column(
           children: [
-            const MarketplaceFilterRow(),
+            MarketplaceFilterRow(onFilterApplied: _onFilterApplied),
             const SizedBox(height: 16),
             Expanded(
               child: Padding(

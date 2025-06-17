@@ -137,7 +137,6 @@ class _SignUpFormState extends State<SignUpForm> {
         'phoneNumber': formattedPhone,
         'type': selectedType,
         'taxId': taxId,
-        'registrationNumber': '',
         'industrySector': '',
         'commercial': '',
         'nationalId': nationalId,

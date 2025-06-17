@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 
 class DropdownRow extends StatefulWidget {
   final String title;
+  final Function(double, double)? onPriceRangeSelected;
 
-  const DropdownRow({super.key, required this.title});
+  const DropdownRow({super.key, required this.title, this.onPriceRangeSelected});
 
   @override
   State<DropdownRow> createState() => _DropdownRowState();
@@ -65,6 +66,7 @@ class _DropdownRowState extends State<DropdownRow> {
                           setState(() {
                             _currentRangeValues = values;
                           });
+                          widget.onPriceRangeSelected?.call(values.start, values.end);
                         },
                         activeColor: AppColors.primary,
                         inactiveColor: AppColors.primary.withOpacity(0.3),
@@ -88,6 +90,7 @@ class _DropdownRowState extends State<DropdownRow> {
                                       double.tryParse(value) ?? _currentRangeValues.start,
                                       _currentRangeValues.end);
                                 });
+                                widget.onPriceRangeSelected?.call(_currentRangeValues.start, _currentRangeValues.end);
                               },
                             ),
                           ),
@@ -108,6 +111,7 @@ class _DropdownRowState extends State<DropdownRow> {
                                       _currentRangeValues.start,
                                       double.tryParse(value) ?? _currentRangeValues.end);
                                 });
+                                widget.onPriceRangeSelected?.call(_currentRangeValues.start, _currentRangeValues.end);
                               },
                             ),
                           ),

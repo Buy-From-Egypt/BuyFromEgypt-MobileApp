@@ -3,8 +3,11 @@ import 'package:buy_from_egypt/core/utils/app_routes.dart';
 import 'package:buy_from_egypt/core/utils/styles.dart';
 import 'package:buy_from_egypt/features/home/presentation/widgets/bottom_navigation_bar.dart'
     show CustomBottomNavigationBar, NavItem;
+import 'package:buy_from_egypt/features/marketplace/presentation/data/product_model.dart';
+import 'package:buy_from_egypt/features/marketplace/presentation/services/saved_products_service.dart';
 import 'package:buy_from_egypt/features/marketplace/presentation/widgets/custom_app_bar_market.dart';
 import 'package:buy_from_egypt/features/marketplace/presentation/widgets/order2_button.dart';
+import 'package:buy_from_egypt/features/marketplace/presentation/widgets/product_grid.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -17,6 +20,9 @@ class SaveView extends StatefulWidget {
 
 class _SaveViewState extends State<SaveView> {
   int currentIndex = 0;
+  List<Product> savedProducts = [];
+  bool isLoading = true;
+  String? error;
 
   final List<NavItem> navItems = [
     NavItem(
@@ -40,6 +46,42 @@ class _SaveViewState extends State<SaveView> {
   late double height;
 
   @override
+  void initState() {
+    super.initState();
+    print('SaveView initState called');
+    _loadSavedProducts();
+  }
+
+  Future<void> _loadSavedProducts() async {
+    if (!mounted) return;
+
+    print('Loading saved products...');
+    setState(() {
+      isLoading = true;
+      error = null;
+    });
+
+    try {
+      final products = await SavedProductsService.getSavedProducts();
+      print('Loaded ${products.length} saved products');
+      if (mounted) {
+        setState(() {
+          savedProducts = products;
+          isLoading = false;
+        });
+      }
+    } catch (e) {
+      print('Error loading saved products: $e');
+      if (mounted) {
+        setState(() {
+          error = e.toString();
+          isLoading = false;
+        });
+      }
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     width = size.width;
@@ -52,24 +94,113 @@ class _SaveViewState extends State<SaveView> {
         currentIndex: currentIndex,
         onTap: (index) => setState(() => currentIndex = index),
       ),
-      body: SingleChildScrollView(
+      body: RefreshIndicator(
+        onRefresh: _loadSavedProducts,
         child: Column(
           children: [
             buildDivider(),
-            SizedBox(height: height * 0.12),
-            buildEmptyOrderImage(imagePath: 'assets/images/Empty bookmark.svg'),
-            SizedBox(height: height * 0.05),
-            buildEmptyOrderTexts(),
-            SizedBox(height: height * 0.15),
-            Orders1Button(
-              text: 'Explore Marketplace',
-              onPressed: () {
-                Navigator.pushNamed(context, AppRoutes.market);
-              },
-            ),
+            const SizedBox(height: 16),
+            Expanded(child: _buildContent()),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildContent() {
+    if (isLoading) {
+      print('Showing loading indicator');
+      return const Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CircularProgressIndicator(color: AppColors.primary),
+            SizedBox(height: 16),
+            Text('Loading saved products...'),
+          ],
+        ),
+      );
+    }
+
+    if (error != null) {
+      print('Showing error: $error');
+      if (error!.contains('not authenticated')) {
+        return Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.lock_outline, color: Colors.orange, size: 48),
+              const SizedBox(height: 16),
+              Text(
+                'Please sign in to view saved products',
+                style: TextStyle(color: Colors.orange[700], fontSize: 16),
+              ),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pushReplacementNamed(context, AppRoutes.auth);
+                },
+                child: const Text('Sign In'),
+              ),
+            ],
+          ),
+        );
+      }
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.error_outline, color: Colors.red, size: 48),
+            const SizedBox(height: 16),
+            Text(
+              'Failed to load saved products',
+              style: TextStyle(color: Colors.red[700], fontSize: 16),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              error!,
+              style: const TextStyle(color: Colors.red),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: _loadSavedProducts,
+              child: const Text('Retry'),
+            ),
+          ],
+        ),
+      );
+    }
+
+    if (savedProducts.isEmpty) {
+      print('No saved products available');
+      return SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        child: SizedBox(
+          height: height,
+          child: Column(
+            children: [
+              SizedBox(height: height * 0.12),
+              buildEmptyOrderImage(imagePath: 'assets/images/Empty bookmark.svg'),
+              SizedBox(height: height * 0.05),
+              buildEmptyOrderTexts(),
+              SizedBox(height: height * 0.15),
+              Orders1Button(
+                text: 'Explore Marketplace',
+                onPressed: () {
+                  Navigator.pushNamed(context, AppRoutes.market);
+                },
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    print('Showing product grid with ${savedProducts.length} products');
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24.0),
+      child: MarketplaceProductGrid(products: savedProducts),
     );
   }
 

@@ -3,9 +3,14 @@ import 'package:buy_from_egypt/core/utils/app_routes.dart';
 import 'package:buy_from_egypt/core/utils/styles.dart';
 import 'package:buy_from_egypt/core/utils/svg_icon.dart';
 import 'package:flutter/material.dart';
+import 'package:buy_from_egypt/features/marketplace/presentation/views/filter_view.dart';
+import 'package:buy_from_egypt/features/marketplace/presentation/data/product_model.dart';
 
 class MarketplaceFilterRow extends StatelessWidget {
-  const MarketplaceFilterRow({super.key});
+  final Function(List<Product>)? onFilterApplied;
+
+  const MarketplaceFilterRow({super.key, this.onFilterApplied});
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -56,8 +61,21 @@ class MarketplaceFilterRow extends StatelessWidget {
                 ),
                 child: Center(
                   child: GestureDetector(
-                    onTap: () {
-                      Navigator.pushNamed(context, AppRoutes.filter);
+                    onTap: () async {
+                      final filteredProducts = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const FilterView(),
+                        ),
+                      );
+                      if (filteredProducts != null && filteredProducts is List<Product>) {
+                        print('MarketplaceFilterRow - Filtered products received: ${filteredProducts.length}');
+                        onFilterApplied?.call(filteredProducts);
+                      } else if (filteredProducts == null) {
+                        print('MarketplaceFilterRow - No filtered products returned (user likely cancelled filter)');
+                      } else {
+                        print('MarketplaceFilterRow - Unexpected data type received from filter: ${filteredProducts.runtimeType}');
+                      }
                     },
                     child: SvgIcon(
                       path: 'assets/images/Filter.svg',

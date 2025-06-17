@@ -3,8 +3,10 @@ import 'package:buy_from_egypt/features/marketplace/presentation/widgets/product
 import 'package:buy_from_egypt/features/marketplace/presentation/widgets/product_info_section.dart';
 import 'package:flutter/material.dart';
 import 'package:buy_from_egypt/core/utils/app_colors.dart';
+import 'package:buy_from_egypt/core/utils/app_routes.dart';
 import 'package:buy_from_egypt/features/home/presentation/widgets/bottom_navigation_bar.dart';
 import 'package:buy_from_egypt/features/auth/presentation/widgets/back_button.dart';
+import 'package:buy_from_egypt/features/marketplace/presentation/services/saved_products_service.dart';
 
 class ProductInfoView extends StatefulWidget {
   const ProductInfoView({
@@ -26,6 +28,8 @@ class _ProductInfoViewState extends State<ProductInfoView> {
   int _selectedColorIndex = 0;
   int _currentPage = 0;
   bool _isDescriptionExpanded = false;
+  bool _isSaved = false;
+  bool _isLoading = false;
 
   final List<Color> availableColors = [
     AppColors.primary,
@@ -34,6 +38,48 @@ class _ProductInfoViewState extends State<ProductInfoView> {
   ];
 
   final PageController _pageController = PageController();
+
+  @override
+  void initState() {
+    super.initState();
+    _checkSavedStatus();
+  }
+
+  Future<void> _checkSavedStatus() async {
+    try {
+      final isSaved = await SavedProductsService.isProductSaved(widget.product.productId);
+      if (mounted) {
+        setState(() {
+          _isSaved = isSaved;
+        });
+      }
+    } catch (e) {
+      print('Error checking saved status: $e');
+      if (e.toString().contains('not authenticated')) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: const Text('Please sign in to save products'),
+              action: SnackBarAction(
+                label: 'Sign In',
+                onPressed: () {
+                  Navigator.pushReplacementNamed(context, AppRoutes.auth);
+                },
+              ),
+            ),
+          );
+        }
+      }
+    }
+  }
+
+  void _onSavedProductsUpdated() {
+    _checkSavedStatus();
+    // Refresh the saved products list if we're in the saves tab
+    if (widget.currentIndex == 2) {
+      Navigator.pushReplacementNamed(context, AppRoutes.save);
+    }
+  }
 
   @override
   void dispose() {
@@ -97,6 +143,8 @@ class _ProductInfoViewState extends State<ProductInfoView> {
                   _isDescriptionExpanded = !_isDescriptionExpanded;
                 });
               },
+              productId: widget.product.productId,
+              onSavedProductsUpdated: _onSavedProductsUpdated,
             ),
           ],
         ),

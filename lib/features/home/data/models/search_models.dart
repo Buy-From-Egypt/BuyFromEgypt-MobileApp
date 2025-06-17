@@ -1,16 +1,19 @@
 class SearchUser {
   final String userId;
   final String name;
+  final String? profileImage;
 
   SearchUser({
     required this.userId,
     required this.name,
+    this.profileImage,
   });
 
   factory SearchUser.fromJson(Map<String, dynamic> json) {
     return SearchUser(
       userId: json['userId'] ?? '',
       name: json['name'] ?? '',
+      profileImage: json['profileImage'],
     );
   }
 }

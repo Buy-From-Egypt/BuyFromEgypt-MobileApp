@@ -5,8 +5,9 @@ import 'package:flutter/material.dart';
 
 class ToggleRow extends StatefulWidget {
   final String title;
+  final ValueChanged<bool>? onToggle;
 
-  const ToggleRow({super.key, required this.title});
+  const ToggleRow({super.key, required this.title, this.onToggle});
 
   @override
   State<ToggleRow> createState() => _ToggleRowState();
@@ -24,7 +25,10 @@ class _ToggleRowState extends State<ToggleRow> {
             style: Styles.textStyle16
                 .copyWith(fontWeight: FontWeight.bold, color: AppColors.black)),
         ActiveColorSwitch(
-          onChanged: (value) => setState(() => enabled = value),
+          onChanged: (value) {
+            setState(() => enabled = value);
+            widget.onToggle?.call(value);
+          },
           scale: 0.7,
         )
       ],

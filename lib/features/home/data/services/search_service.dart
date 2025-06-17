@@ -1,27 +1,21 @@
 import 'dart:convert';
 import 'package:buy_from_egypt/features/home/data/models/search_models.dart';
+import 'package:buy_from_egypt/core/utils/secure_storage.dart';
 import 'package:dio/dio.dart';
 
 class SearchService {
   static const String baseUrl = 'https://buy-from-egypt.vercel.app';
   static final Dio _dio = Dio();
 
-  // You'll need to set this token dynamically after user login.
-  // For now, it's a placeholder.
-  static String? _authToken; 
-
-  static void setAuthToken(String token) {
-    _authToken = token;
-  }
-
   static Future<Map<String, dynamic>> _getAuthHeaders() async {
-    if (_authToken == null) {
+    final token = await SecureStorage.getToken();
+    if (token == null) {
       // In a real app, you might want to throw an error or redirect to login
       print('Warning: Auth token is not set. API calls might fail.');
       return {};
     }
     return {
-      'Authorization': 'Bearer $_authToken',
+      'Authorization': 'Bearer $token',
     };
   }
 

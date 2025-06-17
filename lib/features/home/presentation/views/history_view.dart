@@ -103,7 +103,9 @@ class _HistoryViewState extends State<HistoryView> {
           const SizedBox(height: 24),
           _isLoading
               ? const Expanded(
-                  child: Center(child: CircularProgressIndicator()))
+                  child: Center(child: CircularProgressIndicator(
+                    color: AppColors.primary,
+                  )))
               : _error != null
                   ? Expanded(
                       child: Center(child: Text(_error!)),

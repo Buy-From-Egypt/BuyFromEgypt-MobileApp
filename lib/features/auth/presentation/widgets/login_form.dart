@@ -110,10 +110,11 @@ class _LoginFormState extends State<LoginForm> {
       // Save session data
       await AuthUtils.saveUserSession(response);
 
-      // Retrieve and set the authentication token for SearchService
-      final authToken = await SecureStorage.getToken();
-      if (authToken != null) {
-        SearchService.setAuthToken(authToken);
+      // Save token to secure storage
+      if (response['token'] != null) {
+        await SecureStorage.saveToken(response['token']);
+      } else {
+        throw Exception('No token received from server');
       }
 
       // Save credentials if "Remember Me" is checked
