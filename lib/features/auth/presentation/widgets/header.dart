@@ -23,8 +23,8 @@ class Header extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(height: 60),
-          const Padding(
-            padding: EdgeInsets.only(left: 24),
+          Padding(
+            padding: const EdgeInsets.only(left: 24),
             child: CustomBackButton(
               iconColor: AppColors.background,
               borderColor: AppColors.background,

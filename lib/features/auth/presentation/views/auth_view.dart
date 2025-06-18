@@ -174,7 +174,9 @@ class _AuthViewState extends State<AuthView> {
             Container(
               color: Colors.black.withOpacity(0.4),
               child: const Center(
-                child: CircularProgressIndicator(),
+                child: CircularProgressIndicator(
+                  color: AppColors.primary,
+                ),
               ),
             ),
         ],

@@ -14,7 +14,7 @@ class CustomSellWidget extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
       decoration: BoxDecoration(
-        border: Border.all(color: AppColors.c4, width: 1),
+        border: Border.all(color: AppColors.c5, width: 1),
       ),
       child: Row(
         children: [

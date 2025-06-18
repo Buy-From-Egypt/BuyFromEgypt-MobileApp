@@ -10,6 +10,7 @@ import 'package:buy_from_egypt/features/auth/presentation/widgets/remember.dart'
 import 'package:buy_from_egypt/features/home/presentation/views/home_view.dart';
 import 'package:buy_from_egypt/features/auth/presentation/views/pending_view.dart';
 import 'package:buy_from_egypt/services/api_service.dart';
+import 'package:buy_from_egypt/features/home/data/services/search_service.dart';
 import 'package:flutter/material.dart';
 import 'package:solar_icons/solar_icons.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -108,6 +109,13 @@ class _LoginFormState extends State<LoginForm> {
 
       // Save session data
       await AuthUtils.saveUserSession(response);
+
+      // Save token to secure storage
+      if (response['token'] != null) {
+        await SecureStorage.saveToken(response['token']);
+      } else {
+        throw Exception('No token received from server');
+      }
 
       // Save credentials if "Remember Me" is checked
       if (_rememberMe) {

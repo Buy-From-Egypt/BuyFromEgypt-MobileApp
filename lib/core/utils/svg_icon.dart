@@ -21,4 +21,8 @@ class SvgIcon extends StatelessWidget {
       height: height,
     );
   }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 288028117915110d954381bc5d89feb102691a49

@@ -23,7 +23,7 @@ class LoginHeader extends StatelessWidget {
           const SizedBox(height: 60),
           const Padding(
             padding: EdgeInsets.only(left: 24),
-            child: CustomBackButton(
+            child: CustomBackButton2(
               iconColor: AppColors.background,
               borderColor: AppColors.background,
             ),

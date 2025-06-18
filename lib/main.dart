@@ -20,11 +20,27 @@ import 'package:buy_from_egypt/features/auth/presentation/views/pending_view.dar
 
 import 'package:buy_from_egypt/features/home/presentation/views/home_view.dart';
 import 'package:buy_from_egypt/features/home/presentation/views/search_view.dart';
+<<<<<<< HEAD
 import 'package:buy_from_egypt/features/home/presentation/views/comment_view_im.dart';
 
 import 'package:buy_from_egypt/features/home/presentation/view_model/post/post_repo_impl.dart';
 import 'package:buy_from_egypt/features/home/presentation/view_model/post/cubit/post_cubit.dart';
 import 'package:buy_from_egypt/features/home/presentation/view_model/post/cubit/create_post_cubit.dart';
+=======
+import 'package:buy_from_egypt/features/home/presentation/views/history_view.dart';
+import 'package:buy_from_egypt/features/marketplace/presentation/views/add_product_view.dart';
+import 'package:buy_from_egypt/features/marketplace/presentation/views/filter_view.dart';
+import 'package:buy_from_egypt/features/marketplace/presentation/views/market_view.dart';
+import 'package:buy_from_egypt/features/marketplace/presentation/views/order1_view.dart';
+import 'package:buy_from_egypt/features/marketplace/presentation/views/order2_view.dart';
+import 'package:buy_from_egypt/features/marketplace/presentation/views/save_view.dart';
+import 'package:buy_from_egypt/features/onboarding/presentation/views/onboarding_screens.dart';
+import 'package:buy_from_egypt/features/splash/presentation/views/splash_view.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:logger/logger.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
+>>>>>>> 288028117915110d954381bc5d89feb102691a49
 
 final logger = Logger();
 
@@ -102,6 +118,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       initialRoute: AppRoutes.splash,
+<<<<<<< HEAD
       onGenerateRoute: (settings) {
         switch (settings.name) {
           case AppRoutes.splash:
@@ -152,6 +169,54 @@ class MyApp extends StatelessWidget {
           default:
             return _errorRoute('404 - Page Not Found');
         }
+=======
+      routes: {
+        AppRoutes.splash: (context) => const SplashView(),
+        AppRoutes.onboarding: (context) => const OnboardingScreen(),
+        AppRoutes.auth: (context) => const AuthView(),
+        AppRoutes.home: (context) => const HomeView(),
+        AppRoutes.market: (context) => MarketView(),
+        AppRoutes.orders1: (context) => const Order1View(),
+        AppRoutes.orders2: (context) => const Orders2View(),
+        AppRoutes.forgetPassword: (context) => const ForgetPasswordView(),
+        AppRoutes.updatePassword: (context) {
+          final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+          final email = args?['email'] as String?;
+          if (email == null) {
+            return const Scaffold(
+              body: Center(child: Text('Email is required for password update')),
+            );
+          }
+          return UpdatePasswordView(email: email);
+        },
+        AppRoutes.otpForgetPassword: (context) {
+          final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+          final email = args?['email'] as String?;
+          if (email == null) {
+            return const Scaffold(
+              body: Center(child: Text('Email is required for OTP verification')),
+            );
+          }
+          return OtpForgetPassword(email: email);
+        },
+        AppRoutes.successfully: (context) => const SuccessfullyView(),
+        AppRoutes.preference: (context) => const PreferenceView(),
+        AppRoutes.pending: (context) {
+          final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+          final email = args?['email'] as String?;
+          if (email == null) {
+            return const Scaffold(
+              body: Center(child: Text('Email is required')),
+            );
+          }
+          return PendingView(email: email);
+        },
+        AppRoutes.search: (context) => const SearchView(),
+        AppRoutes.filter: (context)=> const FilterView(),
+        AppRoutes.addProduct: (context) => const AddProductView(),
+        AppRoutes.save: (context) =>  SaveView(),
+        AppRoutes.history: (context) => const HistoryView(),
+>>>>>>> 288028117915110d954381bc5d89feb102691a49
       },
     );
   }

@@ -11,5 +11,15 @@ class AppRoutes {
   static const String search = '/searchView';
   static const String pending = '/pendingView';
   static const String pendingMoreInfo = '/pendingMoreInfo';
+<<<<<<< HEAD
   static const String comment = '/commentViewIm';
+=======
+  static const String market = '/marketView';
+  static const String orders1 = '/orders1View';
+  static const String orders2 = '/orders2View';
+  static const String filter = '/filterView';
+  static const String addProduct = '/addProductView';
+  static const String save = '/saveView';
+  static const String history = '/historyView';
+>>>>>>> 288028117915110d954381bc5d89feb102691a49
 }

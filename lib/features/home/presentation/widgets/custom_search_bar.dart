@@ -1,9 +1,11 @@
 import 'package:buy_from_egypt/features/home/presentation/widgets/profile_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:buy_from_egypt/features/home/presentation/widgets/custom_back_button.dart';
 
 class CustomSearchBar extends StatelessWidget {
-  const CustomSearchBar({super.key});
+  final TextEditingController? controller;
+  const CustomSearchBar({super.key, this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +19,7 @@ class CustomSearchBar extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                _buildIconButton(context, borderColor: const Color(0xFF999999)),
+                CustomBackButton(borderColor: const Color(0xFF999999)),
                 _buildSearchBar(),
                 const ProfileImage(
                     path: 'assets/images/theo.jpeg', width: 36, height: 36),
@@ -46,39 +48,28 @@ class CustomSearchBar extends StatelessWidget {
             width: 16,
           ),
           const SizedBox(width: 8),
-          const Text(
-            'Search',
-            style: TextStyle(
-              color: Color(0xFF6C7072),
-              fontSize: 16,
-              fontFamily: 'Inter',
-              fontWeight: FontWeight.w400,
+          Expanded(
+            child: TextField(
+              controller: controller,
+              decoration: const InputDecoration(
+                border: InputBorder.none,
+                hintText: 'Search',
+                hintStyle: TextStyle(
+                  color: Color(0xFF6C7072),
+                  fontSize: 16,
+                  fontFamily: 'Inter',
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+              style: const TextStyle(
+                color: Colors.black,
+                fontSize: 16,
+                fontFamily: 'Inter',
+                fontWeight: FontWeight.w400,
+              ),
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildIconButton(BuildContext context, {Color? borderColor}) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.pop(context);
-      },
-      child: Container(
-        width: 36,
-        height: 36,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          border: Border.all(color: borderColor ?? Colors.transparent),
-        ),
-        child: Center(
-          child: SvgPicture.asset(
-            'assets/images/back_f.svg',
-            width: 20,
-            height: 20,
-          ),
-        ),
       ),
     );
   }

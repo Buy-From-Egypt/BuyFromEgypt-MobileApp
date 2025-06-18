@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:solar_icons/solar_icons.dart';
 
-class CustomBackButton extends StatelessWidget {
-  const CustomBackButton(
+class CustomBackButton2 extends StatelessWidget {
+  const CustomBackButton2(
       {super.key, required Color iconColor, required Color borderColor});
 
   @override
@@ -15,7 +15,7 @@ class CustomBackButton extends StatelessWidget {
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         border: Border.all(
-          color: AppColors.c5,
+          color: AppColors.primary,
           width: 1,
         ),
       ),
@@ -24,7 +24,7 @@ class CustomBackButton extends StatelessWidget {
           icon: const FaIcon(
             SolarIconsOutline.arrowLeft,
             size: 18,
-            color: AppColors.background,
+            color: AppColors.primary,
           ),
           onPressed: () {
             Navigator.pop(context);
