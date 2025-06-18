@@ -66,7 +66,7 @@ class _CommentItemState extends State<CommentItem> {
                   ),
                   SizedBox(height: width * 0.01),
                   RatingBar.builder(
-                    initialRating: rating,
+                    initialRating: rating.clamp(0, 5),
                     minRating: 0,
                     direction: Axis.horizontal,
                     itemCount: 5,
@@ -74,10 +74,8 @@ class _CommentItemState extends State<CommentItem> {
                     allowHalfRating: false,
                     unratedColor: AppColors.yellow.withOpacity(0.3),
                     itemPadding: const EdgeInsets.symmetric(horizontal: 1),
-                    itemBuilder: (context, _) => const Icon(
-                      Icons.star,
-                      color: AppColors.yellow,
-                    ),
+                    itemBuilder: (context, _) =>
+                        const Icon(Icons.star, color: AppColors.yellow),
                     onRatingUpdate: (value) {
                       setState(() {
                         if (rating == value) {
@@ -98,7 +96,7 @@ class _CommentItemState extends State<CommentItem> {
             ],
           ),
           SizedBox(height: width * 0.02),
-          Text(widget.comment.contant, style: Styles.textStyle14pr),
+          Text(widget.comment.content, style: Styles.textStyle14pr),
           SizedBox(height: width * 0.02),
           Row(
             children: [
@@ -171,7 +169,7 @@ class _CommentItemState extends State<CommentItem> {
                     Text(reply.userName,
                         style: Styles.textStyle14pr.copyWith(fontSize: 13)),
                     SizedBox(height: 4),
-                    Text(reply.contant, style: Styles.textStyle12700),
+                    Text(reply.content, style: Styles.textStyle12700),
                     SizedBox(height: 6),
                   ],
                 ),

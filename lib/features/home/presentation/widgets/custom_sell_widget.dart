@@ -1,5 +1,6 @@
 import 'package:buy_from_egypt/core/utils/app_colors.dart';
 import 'package:buy_from_egypt/core/utils/styles.dart';
+import 'package:buy_from_egypt/features/company_profile.dart/presentation/views/company_info_screen.dart';
 import 'package:buy_from_egypt/features/home/presentation/views/create_post_ex.dart';
 import 'package:buy_from_egypt/features/home/presentation/widgets/profile_image.dart';
 import 'package:flutter/material.dart';
@@ -17,10 +18,21 @@ class CustomSellWidget extends StatelessWidget {
       ),
       child: Row(
         children: [
-          const ProfileImage(
-            path: 'assets/images/theo.jpeg',
-            width: 48,
-            height: 48,
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      const CompanyInfoScreen(), // <- Your target screen
+                ),
+              );
+            },
+            child: const ProfileImage(
+              path: 'assets/images/theo.jpeg',
+              width: 48,
+              height: 48,
+            ),
           ),
           const SizedBox(width: 8),
           Expanded(

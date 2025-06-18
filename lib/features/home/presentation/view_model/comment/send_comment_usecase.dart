@@ -1,7 +1,8 @@
+// send_comment_use_case.dart
 import 'package:buy_from_egypt/features/home/presentation/view_model/comment/comment_repository.dart';
 
 abstract class SendCommentUseCase {
-  Future<void> call({required String contant, required String postId});
+  Future<void> call({required String content, required String postId});
 }
 
 class SendCommentUseCaseImpl implements SendCommentUseCase {
@@ -10,10 +11,11 @@ class SendCommentUseCaseImpl implements SendCommentUseCase {
   SendCommentUseCaseImpl(this.repository);
 
   @override
-  Future<void> call({required String contant, required String postId}) async {
-    // ✅ مؤقتًا: نطبع الكومنت في الكونسول
-    print('📤 Mock SendComment: "$contant" to postId: $postId');
-    await Future.delayed(const Duration(milliseconds: 500)); // Simulate delay
-    return;
+  Future<void> call({required String content, required String postId}) async {
+    try {
+      await repository.sendComment(content: content, postId: postId);
+    } catch (e) {
+      rethrow;
+    }
   }
 }

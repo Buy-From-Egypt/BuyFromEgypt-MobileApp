@@ -16,7 +16,8 @@ class CommentError extends CommentState {
   CommentError(this.message);
 }
 
-class CommentSending extends CommentState {}
+class CommentSent extends CommentState {}
 
-class CommentSent
-    extends CommentState {} // Use this for side effects like clearing input
+class ReplyCanceled extends CommentState {}
+
+class CommentSending extends CommentState {}

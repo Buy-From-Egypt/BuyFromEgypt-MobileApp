@@ -10,11 +10,25 @@ class CommentsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CommentCubit, CommentState>(
+    return BlocConsumer<CommentCubit, CommentState>(
+      listener: (context, state) {
+        if (state is CommentError) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.message),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      },
       builder: (context, state) {
         if (state is CommentLoading) {
           return const Center(child: CircularProgressIndicator());
         } else if (state is CommentLoaded) {
+          if (state.comments.isEmpty) {
+            return const Center(child: Text('لا توجد تعليقات بعد.'));
+          }
+
           return ListView.builder(
             padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
             itemCount: state.comments.length,
@@ -27,14 +41,13 @@ class CommentsList extends StatelessWidget {
                     backgroundImage: AssetImage('assets/images/theo.jpeg'),
                   ),
                   title: Text(comment.userName),
-                  subtitle: Text(comment.contant),
+                  subtitle: Text(comment.content),
                 ),
               );
             },
           );
-        } else if (state is CommentError) {
-          return Center(child: Text(state.message));
         }
+
         return const SizedBox.shrink();
       },
     );

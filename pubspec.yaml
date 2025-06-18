@@ -31,6 +31,7 @@ dependencies:
   logger: ^2.0.2+1
   smooth_star_rating_null_safety: ^1.0.4+2
   flutter_rating_bar: ^4.0.1
+  image_picker: ^1.1.2
 
 dev_dependencies:
   flutter_test:
@@ -42,7 +43,7 @@ flutter:
 
   assets:
     - assets/images/
-
+    - assets/images/Phone Calling Rounded.svg
   fonts:
     - family: Manrope
       fonts:

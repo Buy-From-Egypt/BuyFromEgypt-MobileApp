@@ -1,11 +1,14 @@
 import 'package:buy_from_egypt/core/utils/app_colors.dart';
 import 'package:buy_from_egypt/core/utils/app_routes.dart';
+import 'package:buy_from_egypt/features/home/presentation/view_model/comment/comment_cubit.dart';
+import 'package:buy_from_egypt/features/home/presentation/views/comment_view_im.dart';
 import 'package:buy_from_egypt/features/home/presentation/widgets/action_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class RateCommentShare extends StatelessWidget {
-  final String postId; // 📌 נוסיף את ה־postId
+  final String postId;
   const RateCommentShare({super.key, required this.postId});
 
   @override
@@ -23,10 +26,15 @@ class RateCommentShare extends StatelessWidget {
                 imagePath: 'assets/images/Chat Unread.svg',
                 label: 'Comment',
                 onTap: () {
-                  Navigator.pushNamed(
+                  Navigator.push(
                     context,
-                    AppRoutes.comment,
-                    arguments: postId,
+                    MaterialPageRoute(
+                      builder: (_) => BlocProvider(
+                        create: (_) =>
+                            CommentCubit.create()..fetchComments(postId),
+                        child: CommentViewIm(postId: postId),
+                      ),
+                    ),
                   );
                 },
               ),

@@ -1,10 +1,25 @@
 import 'package:buy_from_egypt/core/utils/app_colors.dart';
 import 'package:buy_from_egypt/core/utils/styles.dart';
+import 'package:buy_from_egypt/features/home/presentation/view_model/post/cubit/create_post_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:image_picker/image_picker.dart';
 
 class AddToPostBottomSheet extends StatelessWidget {
   const AddToPostBottomSheet({super.key});
+
+  Future<void> _pickImage(BuildContext context) async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      // أرسل المسار إلى Cubit
+      context.read<CreatePostCubit>().onImageSelected(pickedFile.path);
+    }
+
+    Navigator.pop(context); // قفل الـ bottom sheet بعد الاختيار
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +37,7 @@ class AddToPostBottomSheet extends StatelessWidget {
         children: [
           // Stack for handle and close button
           Stack(
-            clipBehavior: Clip.none, // Add this line
+            clipBehavior: Clip.none,
             children: [
               Align(
                 alignment: Alignment.center,
@@ -55,7 +70,6 @@ class AddToPostBottomSheet extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 12),
-          // Centered Text
           Row(
             children: [
               Expanded(
@@ -75,7 +89,7 @@ class AddToPostBottomSheet extends StatelessWidget {
               _BottomSheetItem(
                 iconPath: 'assets/images/black image.svg',
                 label: 'Photo',
-                onTap: () => print('Photo tapped'),
+                onTap: () => _pickImage(context),
               ),
               _BottomSheetItem(
                 iconPath: 'assets/images/black video.svg',

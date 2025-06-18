@@ -7,7 +7,7 @@ class RatingAndComments extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Padding(
-      padding: EdgeInsets.only(left: 24 , bottom: 16),
+      padding: EdgeInsets.only(left: 24, bottom: 16),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,

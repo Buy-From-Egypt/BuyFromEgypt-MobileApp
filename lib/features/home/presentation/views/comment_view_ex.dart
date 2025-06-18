@@ -59,7 +59,7 @@ class CommentViewEx extends StatelessWidget {
             ),
           ),*/
           const Divider(thickness: 1, height: 1),
-          const CommentInputBar(),
+          // const CommentInputBar(),
         ],
       ),
     );

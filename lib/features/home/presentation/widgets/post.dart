@@ -13,10 +13,11 @@ class Post extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('🔥 post.postId inside Post widget: ${post.postId}');
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const HeaderOfCard(),
+        HeaderOfCard(post: post),
 
         // ✅ description from model
         Padding(

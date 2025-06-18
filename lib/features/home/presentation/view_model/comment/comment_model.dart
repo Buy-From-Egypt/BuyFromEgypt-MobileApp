@@ -1,6 +1,6 @@
 class CommentModel {
   final String id;
-  final String contant;
+  final String content;
   final String userName;
   final DateTime createdAt;
   int rating;
@@ -13,7 +13,7 @@ class CommentModel {
 
   CommentModel({
     required this.id,
-    required this.contant,
+    required this.content,
     required this.userName,
     required this.createdAt,
     required this.rating,
@@ -28,7 +28,7 @@ class CommentModel {
   factory CommentModel.fromJson(Map<String, dynamic> json) {
     return CommentModel(
       id: json['id'],
-      contant: json['contant'],
+      content: json['contant'],
       userName: json['userName'],
       createdAt: DateTime.parse(json['createdAt']),
       rating: json['rating'] ?? 0,
@@ -47,7 +47,7 @@ class CommentModel {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'contant': contant,
+      'contant': content,
       'userName': userName,
       'createdAt': createdAt.toIso8601String(),
       'rating': rating,

@@ -1,15 +1,16 @@
-import 'package:buy_from_egypt/features/home/presentation/views/market_view_ex.dart';
-import 'package:buy_from_egypt/features/home/presentation/views/order1_view_ex.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:buy_from_egypt/core/utils/app_colors.dart';
 import 'package:buy_from_egypt/features/home/presentation/widgets/bottom_navigation_bar.dart';
 import 'package:buy_from_egypt/features/home/presentation/widgets/custom_sell_widget.dart';
 import 'package:buy_from_egypt/features/home/presentation/widgets/post.dart';
 import 'package:buy_from_egypt/features/home/presentation/widgets/custom_app_bar.dart';
 import 'package:buy_from_egypt/features/home/presentation/view_model/post/cubit/post_cubit.dart';
+import 'package:buy_from_egypt/features/home/presentation/view_model/post/cubit/create_post_cubit.dart';
 import 'package:buy_from_egypt/features/home/presentation/view_model/post/model/post_model.dart';
+import 'package:buy_from_egypt/features/home/presentation/view_model/post/post_repo_impl.dart';
+import 'package:buy_from_egypt/features/home/presentation/views/market_view_ex.dart';
+import 'package:buy_from_egypt/features/home/presentation/views/order1_view_ex.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -35,8 +36,17 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => PostCubit()..fetchPosts(), // ✅ نجيب البيانات هنا
+    final postRepo = PostRepoImpl();
+
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<PostCubit>(
+          create: (_) => PostCubit(postRepo: postRepo)..fetchPosts(),
+        ),
+        BlocProvider<CreatePostCubit>(
+          create: (_) => CreatePostCubit(postRepo: postRepo),
+        ),
+      ],
       child: Scaffold(
         backgroundColor: AppColors.white,
         body: pages[currentIndex],
@@ -55,6 +65,7 @@ class HomeBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    DateTime now = DateTime.now();
     return Column(
       children: [
         const CustomAppBar(),
@@ -66,9 +77,14 @@ class HomeBody extends StatelessWidget {
                 return const Center(child: Text("No posts yet."));
               }
 
+              // ✅ لو في بوستات بتنزل غلط، اعكسيها هنا احتياطيًا
+              final sortedPosts = List<PostModel>.from(posts);
+
               return ListView.builder(
-                itemCount: posts.length,
-                itemBuilder: (context, index) => Post(post: posts[index]),
+                itemCount: sortedPosts.length,
+                itemBuilder: (context, index) {
+                  return Post(post: sortedPosts[index]);
+                },
               );
             },
           ),
