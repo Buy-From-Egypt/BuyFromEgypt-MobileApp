@@ -4,8 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:buy_from_egypt/features/marketplace/presentation/widgets/drop_down_row.dart';
 import 'package:buy_from_egypt/features/marketplace/presentation/widgets/toggle_row.dart';
 import 'package:buy_from_egypt/features/marketplace/presentation/services/product_service.dart';
-import 'package:buy_from_egypt/features/marketplace/presentation/data/product_model.dart';
-import 'package:buy_from_egypt/core/utils/app_colors.dart';
+import 'package:buy_from_egypt/features/auth/presentation/widgets/custom_button.dart';
 
 class FilterView extends StatelessWidget {
   const FilterView({super.key});
@@ -68,19 +67,15 @@ class _FilterContentState extends State<FilterContent> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          _isLoadingCategories
-              ? const CircularProgressIndicator(
-                  color: AppColors.primary,
-                )
-              : IndustrySection(
-                  categories: _categories,
-                  onCategorySelected: (categoryId) {
-                    setState(() {
-                      _selectedCategoryId = categoryId;
-                    });
-                  },
-                  isLoading: _isLoadingCategories,
-                ),
+          IndustrySection(
+            categories: _categories,
+            onCategorySelected: (categoryId) {
+              setState(() {
+                _selectedCategoryId = categoryId;
+              });
+            },
+            isLoading: _isLoadingCategories,
+          ),
           const SizedBox(height: 24),
           ToggleRow(
             title: 'Free shipping',
@@ -112,20 +107,16 @@ class _FilterContentState extends State<FilterContent> {
           const SizedBox(height: 24),
           const DropdownRow(title: 'Ratings'),
           const SizedBox(height: 24),
-          ElevatedButton(
+          CustomButton(
             onPressed: () async {
-              // TODO: Implement apply filter logic
-              print('Selected Category ID: $_selectedCategoryId');
-              print('Min Price: $_minPrice, Max Price: $_maxPrice');
-              print('Free Shipping: $_freeShipping');
-              print('In-Stock Only: $_inStockOnly');
+              print('Filter params: categoryId=$_selectedCategoryId, minPrice=$_minPrice, maxPrice=$_maxPrice, active=false, available=${_inStockOnly ? true : null}');
               try {
                 final products = await ProductService.getAllProductsByFilter(
                   categoryId: _selectedCategoryId,
                   minPrice: _minPrice,
                   maxPrice: _maxPrice,
-                  available: _inStockOnly, // Assuming in-stock relates to available
-                  // free shipping is not a direct backend filter, would need to be handled client-side or as a custom backend filter
+                  active: false,
+                  available: _inStockOnly ? true : null,
                 );
                 print('Filtered products: ${products.length}');
                 Navigator.pop(context, products);
@@ -133,8 +124,10 @@ class _FilterContentState extends State<FilterContent> {
                 print('Error applying filters: $e');
               }
             },
-            child: const Text('Apply Filters'),
+            text: 'Apply',
+            isLoading: false,
           ),
+          const SizedBox(height: 64),
         ],
       ),
     );

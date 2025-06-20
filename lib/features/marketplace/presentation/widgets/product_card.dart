@@ -52,6 +52,18 @@ class ProductCard extends StatelessWidget {
                     ? Image.network(
                         product.images.first,
                         fit: BoxFit.contain,
+                        loadingBuilder: (context, child, loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return Center(
+                            child: CircularProgressIndicator(
+                              value: loadingProgress.expectedTotalBytes != null
+                                  ? loadingProgress.cumulativeBytesLoaded /
+                                      loadingProgress.expectedTotalBytes!
+                                  : null,
+                              color: AppColors.primary,
+                            ),
+                          );
+                        },
                         errorBuilder: (context, error, stackTrace) {
                           print('Error loading image for ${product.name}: $error');
                           return const Center(

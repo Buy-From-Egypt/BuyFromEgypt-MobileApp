@@ -1,4 +1,5 @@
 import 'package:buy_from_egypt/features/marketplace/presentation/data/product_model.dart';
+import 'package:buy_from_egypt/features/marketplace/presentation/widgets/order_review.dart';
 import 'package:buy_from_egypt/features/marketplace/presentation/widgets/product_dot_indicator.dart';
 import 'package:buy_from_egypt/features/marketplace/presentation/widgets/product_info_section.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,7 @@ import 'package:buy_from_egypt/features/marketplace/presentation/services/saved_
 
 class ProductInfoView extends StatefulWidget {
   const ProductInfoView({
-    super.key, 
+    super.key,
     required this.product,
     required this.currentIndex,
     required this.onNavigationTap,
@@ -47,7 +48,8 @@ class _ProductInfoViewState extends State<ProductInfoView> {
 
   Future<void> _checkSavedStatus() async {
     try {
-      final isSaved = await SavedProductsService.isProductSaved(widget.product.productId);
+      final isSaved =
+          await SavedProductsService.isProductSaved(widget.product.productId);
       if (mounted) {
         setState(() {
           _isSaved = isSaved;
@@ -75,7 +77,6 @@ class _ProductInfoViewState extends State<ProductInfoView> {
 
   void _onSavedProductsUpdated() {
     _checkSavedStatus();
-    // Refresh the saved products list if we're in the saves tab
     if (widget.currentIndex == 2) {
       Navigator.pushReplacementNamed(context, AppRoutes.save);
     }
@@ -116,37 +117,42 @@ class _ProductInfoViewState extends State<ProductInfoView> {
         onTap: widget.onNavigationTap,
       ),
       body: SafeArea(
-        child: Column(
-          children: [
-            _buildHeader(screenSize),
-            _buildCarousel(screenSize),
-            ProductDotIndicator(
-              currentIndex: _currentPage,
-              count: widget.product.images.isNotEmpty ? widget.product.images.length : 1,
-            ),
-            ProductInfoSection(
-              productName: widget.product.name,
-              productPrice: widget.product.price,
-              productDescription: widget.product.description,
-              availableColors: availableColors,
-              onColorSelected: (index) {
-                setState(() {
-                  _selectedColorIndex = index;
-                });
-              },
-              screenSize: screenSize,
-              currencyCode: widget.product.currencyCode,
-              selectedColorIndex: _selectedColorIndex,
-              isDescriptionExpanded: _isDescriptionExpanded,
-              onReadMoreTap: () {
-                setState(() {
-                  _isDescriptionExpanded = !_isDescriptionExpanded;
-                });
-              },
-              productId: widget.product.productId,
-              onSavedProductsUpdated: _onSavedProductsUpdated,
-            ),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              _buildHeader(screenSize),
+              _buildCarousel(screenSize),
+              ProductDotIndicator(
+                currentIndex: _currentPage,
+                count: widget.product.images.isNotEmpty
+                    ? widget.product.images.length
+                    : 1,
+              ),
+              ProductInfoSection(
+                productName: widget.product.name,
+                productPrice: widget.product.price,
+                productDescription: widget.product.description,
+                availableColors: availableColors,
+                onColorSelected: (index) {
+                  setState(() {
+                    _selectedColorIndex = index;
+                  });
+                },
+                screenSize: screenSize,
+                currencyCode: widget.product.currencyCode,
+                selectedColorIndex: _selectedColorIndex,
+                isDescriptionExpanded: _isDescriptionExpanded,
+                onReadMoreTap: () {
+                  setState(() {
+                    _isDescriptionExpanded = !_isDescriptionExpanded;
+                  });
+                },
+                productId: widget.product.productId,
+                onSavedProductsUpdated: _onSavedProductsUpdated,
+              ),
+             
+            ],
+          ),
         ),
       ),
     );
@@ -167,8 +173,8 @@ class _ProductInfoViewState extends State<ProductInfoView> {
 
   Widget _buildCarousel(Size screenSize) {
     if (widget.product.images.isEmpty) {
-      return Expanded(
-        flex: 5,
+      return SizedBox(
+        height: screenSize.height * 0.28,
         child: Center(
           child: Icon(
             Icons.image_not_supported,
@@ -179,8 +185,8 @@ class _ProductInfoViewState extends State<ProductInfoView> {
       );
     }
 
-    return Expanded(
-      flex: 5,
+    return SizedBox(
+      height: screenSize.height * 0.28,
       child: PageView.builder(
         controller: _pageController,
         itemCount: widget.product.images.length,
@@ -188,7 +194,7 @@ class _ProductInfoViewState extends State<ProductInfoView> {
         itemBuilder: (context, index) => Center(
           child: Image.network(
             widget.product.images[index],
-            height: screenSize.height * 0.28,
+            height: screenSize.height * 0.25,
             fit: BoxFit.contain,
             errorBuilder: (context, error, stackTrace) {
               return const Center(

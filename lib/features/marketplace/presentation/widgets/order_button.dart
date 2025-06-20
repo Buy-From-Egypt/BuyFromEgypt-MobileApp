@@ -103,7 +103,7 @@ class _OrderButtonState extends State<OrderButton> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Edit',
+                      'Request Order',
                       style: Styles.textStyle16c7
                           .copyWith(color: AppColors.newBeige),
                     ),
