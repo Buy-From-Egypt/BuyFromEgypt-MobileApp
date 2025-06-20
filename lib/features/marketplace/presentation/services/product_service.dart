@@ -170,7 +170,7 @@ class ProductService {
     }
   }
 
-  static Future<List<Product>> getAllProductsByFilter({
+  static Future<PaginatedResponse<Product>> getAllProductsByFilter({
     String? categoryId,
     double? minPrice,
     double? maxPrice,
@@ -181,6 +181,7 @@ class ProductService {
     bool? active,
     int? page,
     int? limit,
+    int? minRating,
   }) async {
     try {
       final Map<String, dynamic> queryParams = {};
@@ -194,6 +195,7 @@ class ProductService {
       if (active != null) queryParams['active'] = active;
       if (page != null) queryParams['page'] = page;
       if (limit != null) queryParams['limit'] = limit;
+      if (minRating != null) queryParams['minRating'] = minRating;
 
       // Retrieve token from SecureStorage
       final token = await SecureStorage.getToken();
@@ -212,9 +214,15 @@ class ProductService {
       if (response.statusCode == 200) {
         final decodedBody = response.data;
         final List<dynamic> productsList = decodedBody['data'];
-        return productsList
-            .map((productJson) => Product.fromJson(productJson))
-            .toList();
+        final Map<String, dynamic> meta = decodedBody['meta'];
+        return PaginatedResponse(
+          data: productsList.map((productJson) => Product.fromJson(productJson)).toList(),
+          currentPage: meta['page'] ?? page,
+          totalPages: meta['totalPages'] ?? 1,
+          totalItems: meta['total'] ?? productsList.length,
+          hasNextPage: meta['NextPage'] ?? false,
+          hasPreviousPage: meta['PreviousPage'] ?? false,
+        );
       } else {
         throw Exception('Failed to load filtered products: ${response.statusCode}');
       }

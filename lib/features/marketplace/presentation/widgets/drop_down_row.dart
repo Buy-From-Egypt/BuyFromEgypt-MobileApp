@@ -5,9 +5,10 @@ import 'package:flutter/material.dart';
 class DropdownRow extends StatefulWidget {
   final String title;
   final Function(double, double)? onPriceRangeSelected;
+  final Function(int)? onRatingSelected;
 
   const DropdownRow(
-      {super.key, required this.title, this.onPriceRangeSelected});
+      {super.key, required this.title, this.onPriceRangeSelected, this.onRatingSelected});
 
   @override
   State<DropdownRow> createState() => _DropdownRowState();
@@ -156,6 +157,7 @@ class _DropdownRowState extends State<DropdownRow> {
                               setState(() {
                                 _selectedRating = index + 1;
                               });
+                              widget.onRatingSelected?.call(_selectedRating);
                             },
                             child: Icon(
                               index < _selectedRating

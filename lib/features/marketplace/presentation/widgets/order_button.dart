@@ -107,11 +107,11 @@ class _OrderButtonState extends State<OrderButton> {
                       style: Styles.textStyle16c7
                           .copyWith(color: AppColors.newBeige),
                     ),
-                    SvgIcon(
-                      path: 'assets/images/edit.svg',
-                      height: 24,
-                      width: 24,
-                    ),
+                    // SvgIcon(
+                    //   path: 'assets/images/edit.svg',
+                    //   height: 24,
+                    //   width: 24,
+                    // ),
                   ],
                 ),
               ),

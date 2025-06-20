@@ -39,6 +39,8 @@ class _FilterContentState extends State<FilterContent> {
   double? _maxPrice;
   bool _freeShipping = false;
   bool _inStockOnly = false;
+  int? _minRating;
+
 
   @override
   void initState() {
@@ -105,21 +107,31 @@ class _FilterContentState extends State<FilterContent> {
             },
           ),
           const SizedBox(height: 24),
-          const DropdownRow(title: 'Ratings'),
+          DropdownRow(
+            title: 'Ratings',
+            onRatingSelected: (rating) {
+              setState(() {
+                _minRating = rating;
+              });
+            },
+          ),
           const SizedBox(height: 24),
           CustomButton(
             onPressed: () async {
-              print('Filter params: categoryId=$_selectedCategoryId, minPrice=$_minPrice, maxPrice=$_maxPrice, active=false, available=${_inStockOnly ? true : null}');
+              print('Filter params: categoryId=$_selectedCategoryId, minPrice=$_minPrice, maxPrice=$_maxPrice, minRating=$_minRating, active=false, available=${_inStockOnly ? true : null}');
               try {
-                final products = await ProductService.getAllProductsByFilter(
+                final productsResponse = await ProductService.getAllProductsByFilter(
                   categoryId: _selectedCategoryId,
                   minPrice: _minPrice,
                   maxPrice: _maxPrice,
                   active: false,
                   available: _inStockOnly ? true : null,
+                  minRating: _minRating,
+                  page: 1,
+                  limit: 10,
                 );
-                print('Filtered products: ${products.length}');
-                Navigator.pop(context, products);
+                print('Filtered products: ${productsResponse.data.length}');
+                Navigator.pop(context, productsResponse);
               } catch (e) {
                 print('Error applying filters: $e');
               }
