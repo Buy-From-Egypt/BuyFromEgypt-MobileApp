@@ -19,7 +19,7 @@ class SaveView extends StatefulWidget {
 }
 
 class _SaveViewState extends State<SaveView> {
-  int currentIndex = 0;
+  int currentIndex = 1;
   List<Product> savedProducts = [];
   bool isLoading = true;
   String? error;

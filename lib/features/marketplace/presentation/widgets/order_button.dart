@@ -103,15 +103,15 @@ class _OrderButtonState extends State<OrderButton> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Edit',
+                      'Request Order',
                       style: Styles.textStyle16c7
                           .copyWith(color: AppColors.newBeige),
                     ),
-                    SvgIcon(
-                      path: 'assets/images/edit.svg',
-                      height: 24,
-                      width: 24,
-                    ),
+                    // SvgIcon(
+                    //   path: 'assets/images/edit.svg',
+                    //   height: 24,
+                    //   width: 24,
+                    // ),
                   ],
                 ),
               ),

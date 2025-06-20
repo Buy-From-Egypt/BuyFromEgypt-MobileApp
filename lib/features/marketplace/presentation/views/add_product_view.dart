@@ -11,52 +11,45 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 
-class AddProductView extends StatelessWidget {
+class AddProductView extends StatefulWidget {
   const AddProductView({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: const CAppBar(title: 'Add Product'),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-        child: AddProductForm(),
-      ),
-    );
-  }
+  State<AddProductView> createState() => _AddProductViewState();
 }
 
-class AddProductForm extends StatefulWidget {
-  const AddProductForm({super.key});
-
-  @override
-  State<AddProductForm> createState() => _AddProductFormState();
-}
-
-class _AddProductFormState extends State<AddProductForm> {
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _priceController = TextEditingController();
-  final TextEditingController _currencyCodeController = TextEditingController();
-  final TextEditingController _categoryIdController = TextEditingController();
-  final TextEditingController _descriptionController = TextEditingController();
+class _AddProductViewState extends State<AddProductView> {
+  final _nameController = TextEditingController();
+  final _priceController = TextEditingController();
+  final _currencyCodeController = TextEditingController();
+  final _categoryIdController = TextEditingController();
+  final _descriptionController = TextEditingController();
   File? _image;
   bool _isLoading = false;
 
-  final ImagePicker _picker = ImagePicker();
-
   Future<void> _pickImage() async {
-    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    final ImagePicker picker = ImagePicker();
+    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
     setState(() {
-      if (pickedFile != null) {
-        _image = File(pickedFile.path);
-      } else {
-        print('No image selected.');
+        _image = File(image.path);
+      });
       }
-    });
   }
 
   Future<void> _createProduct() async {
+    if (_nameController.text.isEmpty ||
+        _priceController.text.isEmpty ||
+        _currencyCodeController.text.isEmpty ||
+        _categoryIdController.text.isEmpty ||
+        _descriptionController.text.isEmpty ||
+        _image == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please fill all fields and select an image')),
+      );
+      return;
+    }
+
     setState(() {
       _isLoading = true;
     });
@@ -83,18 +76,25 @@ class _AddProductFormState extends State<AddProductForm> {
         available: true,
         image: _image,
       );
+      
+      if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Product created successfully!')),
       );
-      Navigator.pop(context); // Go back to the previous screen (Marketplace)
+        Navigator.pop(context);
+      }
     } catch (e) {
+      if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Failed to create product: $e')),
       );
+      }
     } finally {
+      if (mounted) {
       setState(() {
         _isLoading = false;
       });
+      }
     }
   }
 
@@ -110,7 +110,11 @@ class _AddProductFormState extends State<AddProductForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: const CAppBar(title: 'Add Product'),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
       child: SingleChildScrollView(
         child: Column(
           children: [
@@ -178,7 +182,9 @@ class _AddProductFormState extends State<AddProductForm> {
                 isLoading: false,
               ),
             ),
+              const SizedBox(height: 24),
           ],
+          ),
         ),
       ),
     );

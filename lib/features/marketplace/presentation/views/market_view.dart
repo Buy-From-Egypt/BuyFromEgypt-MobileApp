@@ -19,6 +19,11 @@ class _MarketViewState extends State<MarketView> {
   List<Product> products = [];
   bool isLoading = true;
   String? error;
+  int currentPage = 1;
+  int totalPages = 1;
+  bool hasNextPage = false;
+  bool hasPreviousPage = false;
+  static const int itemsPerPage = 10;
 
   final List<NavItem> navItems = [
     NavItem(
@@ -46,7 +51,7 @@ class _MarketViewState extends State<MarketView> {
     _loadProducts();
   }
 
-  Future<void> _loadProducts() async {
+  Future<void> _loadProducts({int page = 1}) async {
     if (!mounted) return;
     
     setState(() {
@@ -54,15 +59,21 @@ class _MarketViewState extends State<MarketView> {
       error = null;
     });
 
-    print('Loading products...');
+    print('Loading products for page $page...');
     try {
-      final loadedProducts = await ProductService.getAllProducts();
-      print('Products loaded successfully: ${loadedProducts.length} products');
-      print('First product details: ${loadedProducts.isNotEmpty ? loadedProducts.first.name : 'No products'}');
+      final response = await ProductService.getAllProducts(
+        page: page,
+        limit: itemsPerPage,
+      );
+      print('Products loaded successfully: ${response.data.length} products');
       
       if (mounted) {
         setState(() {
-          products = loadedProducts;
+          products = response.data;
+          currentPage = response.currentPage;
+          totalPages = response.totalPages;
+          hasNextPage = response.hasNextPage;
+          hasPreviousPage = response.hasPreviousPage;
           isLoading = false;
           error = null;
         });
@@ -83,6 +94,11 @@ class _MarketViewState extends State<MarketView> {
     print('_MarketViewState - _onFilterApplied called with ${filteredProducts.length} products');
     setState(() {
       products = filteredProducts;
+      // Reset pagination when filters are applied
+      currentPage = 1;
+      totalPages = 1;
+      hasNextPage = false;
+      hasPreviousPage = false;
     });
   }
 
@@ -98,7 +114,7 @@ class _MarketViewState extends State<MarketView> {
         onTap: (index) => setState(() => currentIndex = index),
       ),
       body: RefreshIndicator(
-        onRefresh: _loadProducts,
+        onRefresh: () => _loadProducts(page: currentPage),
         child: Column(
           children: [
             MarketplaceFilterRow(onFilterApplied: _onFilterApplied),
@@ -109,8 +125,38 @@ class _MarketViewState extends State<MarketView> {
                 child: _buildContent(),
               ),
             ),
+            if (!isLoading && error == null && products.isNotEmpty)
+              _buildPaginationControls(),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildPaginationControls() {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          IconButton(
+            onPressed: hasPreviousPage ? () => _loadProducts(page: currentPage - 1) : null,
+            icon: const Icon(Icons.chevron_left),
+            color: hasPreviousPage ? AppColors.primary : Colors.grey,
+          ),
+          Text(
+            'Page $currentPage of $totalPages',
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          IconButton(
+            onPressed: hasNextPage ? () => _loadProducts(page: currentPage + 1) : null,
+            icon: const Icon(Icons.chevron_right),
+            color: hasNextPage ? AppColors.primary : Colors.grey,
+          ),
+        ],
       ),
     );
   }
@@ -150,7 +196,7 @@ class _MarketViewState extends State<MarketView> {
             ),
             const SizedBox(height: 16),
             ElevatedButton(
-              onPressed: _loadProducts,
+              onPressed: () => _loadProducts(page: currentPage),
               child: const Text('Retry'),
             ),
           ],

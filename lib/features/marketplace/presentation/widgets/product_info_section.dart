@@ -1,9 +1,11 @@
 import 'package:buy_from_egypt/core/utils/app_colors.dart';
 import 'package:buy_from_egypt/features/marketplace/presentation/widgets/order_button.dart';
+import 'package:buy_from_egypt/features/marketplace/presentation/widgets/order_review.dart';
 import 'package:flutter/material.dart';
 import 'package:buy_from_egypt/core/utils/styles.dart';
+import 'package:buy_from_egypt/features/marketplace/presentation/services/product_service.dart';
 
-class ProductInfoSection extends StatelessWidget {
+class ProductInfoSection extends StatefulWidget {
   final String productName;
   final double productPrice;
   final String productDescription;
@@ -34,49 +36,169 @@ class ProductInfoSection extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      flex: 4,
-      child: Container(
-        width: double.infinity,
-        padding: EdgeInsets.symmetric(
-          horizontal: screenSize.width * 0.06,
-          vertical: screenSize.height * 0.02,
-        ),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(child: _buildProductDetails()),
-            Padding(
-              padding: EdgeInsets.only(bottom: screenSize.height * 0.01),
-              child: OrderButton(
-                productId: productId,
-                onSavedProductsUpdated: onSavedProductsUpdated,
+  State<ProductInfoSection> createState() => _ProductInfoSectionState();
+}
+
+class _ProductInfoSectionState extends State<ProductInfoSection> {
+  ProductRating? _rating;
+  bool _loading = false;
+  String? _error;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchRating();
+  }
+
+  Future<void> _fetchRating() async {
+    print('Fetching rating for product: \\${widget.productId}');
+    setState(() {
+      _loading = true;
+      _error = null;
+    });
+    try {
+      final rating = await ProductService.getProductRating(widget.productId);
+      print('Fetched rating: \\${rating.toString()}');
+      setState(() {
+        _rating = rating;
+      });
+    } catch (e) {
+      setState(() {
+        _error = e.toString();
+      });
+    } finally {
+      setState(() {
+        _loading = false;
+      });
+    }
+  }
+
+  Future<void> _showRatingDialog() async {
+    int selectedRating = _rating?.userRating ?? 0;
+    TextEditingController commentController = TextEditingController(text: _rating?.comment ?? '');
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Rate this product'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(5, (index) => IconButton(
+                  icon: Icon(
+                    index < selectedRating ? Icons.star : Icons.star_border,
+                    color: Colors.amber,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      selectedRating = index + 1;
+                    });
+                    // ignore: invalid_use_of_protected_member
+                    (context as Element).markNeedsBuild();
+                  },
+                )),
               ),
+              TextField(
+                controller: commentController,
+                decoration: const InputDecoration(labelText: 'Comment'),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: const Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                if (selectedRating > 0) {
+                  await ProductService.rateProduct(
+                    productId: widget.productId,
+                    value: selectedRating,
+                    comment: commentController.text,
+                  );
+                  Navigator.pop(context, true);
+                }
+              },
+              child: const Text('Submit'),
             ),
           ],
-        ),
+        );
+      },
+    );
+    if (result == true) {
+      _fetchRating();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.symmetric(
+        horizontal: widget.screenSize.width * 0.06,
+        vertical: widget.screenSize.height * 0.02,
+      ),
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          _buildProductDetails(),
+          const SizedBox(height: 16),
+          SizedBox(height: widget.screenSize.height * 0.01),
+          OrderButton(
+            productId: widget.productId,
+            onSavedProductsUpdated: widget.onSavedProductsUpdated,
+          ),
+          const SizedBox(height: 16),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: OrderReviewSection(
+              productId: widget.productId,
+              onReviewSubmitted: _fetchRating,
+            ),
+          ),
+        ],
       ),
     );
   }
 
   Widget _buildProductDetails() {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          _buildNameAndPrice(),
-          SizedBox(height: 24),
-          _buildDescriptionAndColors(),
-          SizedBox(height: 8),
-          _buildDescriptionText(),
-        ],
-      ),
+    final showReadMore = widget.productDescription.length > 100 || widget.productDescription.split('\n').length > 3;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        _buildNameAndPrice(),
+        const SizedBox(height: 24),
+        _buildDescriptionAndColors(),
+        const SizedBox(height: 8),
+        Text(
+          widget.productDescription.isNotEmpty ? widget.productDescription : "No description available.",
+          style: Styles.textStyle14c7.copyWith(
+            color: AppColors.c16,
+            fontSize: widget.screenSize.width * 0.035,
+          ),
+          maxLines: widget.isDescriptionExpanded ? null : 3,
+          overflow: widget.isDescriptionExpanded ? TextOverflow.visible : TextOverflow.ellipsis,
+        ),
+        if (showReadMore)
+          GestureDetector(
+            onTap: widget.onReadMoreTap,
+            child: Text(
+              widget.isDescriptionExpanded ? "Show less" : "Read more",
+              style: Styles.textStyle14info.copyWith(
+                fontSize: widget.screenSize.width * 0.035,
+                decoration: TextDecoration.underline,
+              ),
+            ),
+          ),
+      ],
     );
   }
 
@@ -86,19 +208,19 @@ class ProductInfoSection extends StatelessWidget {
       children: [
         Expanded(
           child: Text(
-            productName,
+            widget.productName,
             style: Styles.textStyle166pr.copyWith(
               fontWeight: FontWeight.bold,
-              fontSize: screenSize.width * 0.045,
+              fontSize: widget.screenSize.width * 0.045,
             ),
             overflow: TextOverflow.ellipsis,
           ),
         ),
         Text(
-          "$productPrice $currencyCode",
+          "${widget.productPrice} ${widget.currencyCode}",
           style: Styles.textStyle14.copyWith(
             color: AppColors.primary,
-            fontSize: screenSize.width * 0.04,
+            fontSize: widget.screenSize.width * 0.04,
           ),
         ),
       ],
@@ -114,23 +236,23 @@ class ProductInfoSection extends StatelessWidget {
           style: Styles.textStyle14.copyWith(
             fontWeight: FontWeight.w600,
             color: AppColors.primary,
-            fontSize: screenSize.width * 0.04,
+            fontSize: widget.screenSize.width * 0.04,
           ),
         ),
         Row(
           children: List.generate(
-            availableColors.length,
+            widget.availableColors.length,
             (index) => GestureDetector(
-              onTap: () => onColorSelected(index),
+              onTap: () => widget.onColorSelected(index),
               child: Container(
-                margin: EdgeInsets.only(left: screenSize.width * 0.02),
-                width: screenSize.width * 0.035,
-                height: screenSize.width * 0.035,
+                margin: EdgeInsets.only(left: widget.screenSize.width * 0.02),
+                width: widget.screenSize.width * 0.035,
+                height: widget.screenSize.width * 0.035,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: availableColors[index],
+                  color: widget.availableColors[index],
                   border: Border.all(
-                    color: selectedColorIndex == index ? AppColors.primary : Colors.transparent,
+                    color: widget.selectedColorIndex == index ? AppColors.primary : Colors.transparent,
                     width: 2,
                   ),
                 ),
@@ -138,46 +260,6 @@ class ProductInfoSection extends StatelessWidget {
             ),
           ),
         ),
-      ],
-    );
-  }
-
-  Widget _buildDescriptionText() {
-    final showReadMore = productDescription.length > 100 || productDescription.split('\n').length > 3;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          productDescription.isNotEmpty ? productDescription : "No description available.",
-          style: Styles.textStyle14c7.copyWith(
-            color: AppColors.c16,
-            fontSize: screenSize.width * 0.035,
-          ),
-          maxLines: isDescriptionExpanded ? null : 3,
-          overflow: isDescriptionExpanded ? TextOverflow.visible : TextOverflow.ellipsis,
-        ),
-        if (showReadMore && !isDescriptionExpanded)
-          GestureDetector(
-            onTap: onReadMoreTap,
-            child: Text(
-              "Read more",
-              style: Styles.textStyle14info.copyWith(
-                fontSize: screenSize.width * 0.035,
-                decoration: TextDecoration.underline,
-              ),
-            ),
-          ),
-        if (showReadMore && isDescriptionExpanded)
-          GestureDetector(
-            onTap: onReadMoreTap,
-            child: Text(
-              "Show less",
-              style: Styles.textStyle14info.copyWith(
-                fontSize: screenSize.width * 0.035,
-                decoration: TextDecoration.underline,
-              ),
-            ),
-          ),
       ],
     );
   }

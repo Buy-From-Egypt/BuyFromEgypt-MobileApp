@@ -5,8 +5,10 @@ import 'package:flutter/material.dart';
 class DropdownRow extends StatefulWidget {
   final String title;
   final Function(double, double)? onPriceRangeSelected;
+  final Function(int)? onRatingSelected;
 
-  const DropdownRow({super.key, required this.title, this.onPriceRangeSelected});
+  const DropdownRow(
+      {super.key, required this.title, this.onPriceRangeSelected, this.onRatingSelected});
 
   @override
   State<DropdownRow> createState() => _DropdownRowState();
@@ -14,8 +16,26 @@ class DropdownRow extends StatefulWidget {
 
 class _DropdownRowState extends State<DropdownRow> {
   bool isExpanded = true;
-  RangeValues _currentRangeValues = const RangeValues(120, 820);
+  RangeValues _currentRangeValues = const RangeValues(0, 0);
   int _selectedRating = 0;
+  late TextEditingController _minController;
+  late TextEditingController _maxController;
+
+  @override
+  void initState() {
+    super.initState();
+    _minController = TextEditingController(
+        text: _currentRangeValues.start.round().toString());
+    _maxController =
+        TextEditingController(text: _currentRangeValues.end.round().toString());
+  }
+
+  @override
+  void dispose() {
+    _minController.dispose();
+    _maxController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +55,8 @@ class _DropdownRowState extends State<DropdownRow> {
               children: [
                 Text(
                   widget.title,
-                  style: Styles.textStyle16.copyWith(fontWeight: FontWeight.bold , color: AppColors.black),
+                  style: Styles.textStyle16.copyWith(
+                      fontWeight: FontWeight.bold, color: AppColors.black),
                 ),
                 AnimatedRotation(
                   duration: const Duration(milliseconds: 200),
@@ -56,7 +77,7 @@ class _DropdownRowState extends State<DropdownRow> {
                       RangeSlider(
                         values: _currentRangeValues,
                         min: 0,
-                        max: 1000,
+                        max: 10000,
                         divisions: 100,
                         labels: RangeLabels(
                           _currentRangeValues.start.round().toString(),
@@ -65,42 +86,48 @@ class _DropdownRowState extends State<DropdownRow> {
                         onChanged: (RangeValues values) {
                           setState(() {
                             _currentRangeValues = values;
+                            _minController.text =
+                                values.start.round().toString();
+                            _maxController.text = values.end.round().toString();
                           });
-                          widget.onPriceRangeSelected?.call(values.start, values.end);
+                          widget.onPriceRangeSelected
+                              ?.call(values.start, values.end);
                         },
                         activeColor: AppColors.primary,
                         inactiveColor: AppColors.primary.withOpacity(0.3),
                       ),
                       Row(
                         children: [
-                          Expanded(child:
-                            TextFormField(
-                              initialValue: _currentRangeValues.start.round().toString(),
+                          Expanded(
+                            child: TextFormField(
+                              controller: _minController,
                               keyboardType: TextInputType.number,
                               decoration: InputDecoration(
-                                label:Text('From'),
+                                label: Text('From'),
                                 border: OutlineInputBorder(
-                                  
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                               ),
                               onChanged: (value) {
                                 setState(() {
                                   _currentRangeValues = RangeValues(
-                                      double.tryParse(value) ?? _currentRangeValues.start,
+                                      double.tryParse(value) ??
+                                          _currentRangeValues.start,
                                       _currentRangeValues.end);
                                 });
-                                widget.onPriceRangeSelected?.call(_currentRangeValues.start, _currentRangeValues.end);
+                                widget.onPriceRangeSelected?.call(
+                                    _currentRangeValues.start,
+                                    _currentRangeValues.end);
                               },
                             ),
                           ),
-                          
                           const SizedBox(width: 16),
-                           Expanded(child: TextFormField(
-                              initialValue: _currentRangeValues.end.round().toString(),
+                          Expanded(
+                            child: TextFormField(
+                              controller: _maxController,
                               keyboardType: TextInputType.number,
                               decoration: InputDecoration(
-                                label:Text('To') ,
+                                label: Text('To'),
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(8),
                                 ),
@@ -109,9 +136,12 @@ class _DropdownRowState extends State<DropdownRow> {
                                 setState(() {
                                   _currentRangeValues = RangeValues(
                                       _currentRangeValues.start,
-                                      double.tryParse(value) ?? _currentRangeValues.end);
+                                      double.tryParse(value) ??
+                                          _currentRangeValues.end);
                                 });
-                                widget.onPriceRangeSelected?.call(_currentRangeValues.start, _currentRangeValues.end);
+                                widget.onPriceRangeSelected?.call(
+                                    _currentRangeValues.start,
+                                    _currentRangeValues.end);
                               },
                             ),
                           ),
@@ -127,10 +157,15 @@ class _DropdownRowState extends State<DropdownRow> {
                               setState(() {
                                 _selectedRating = index + 1;
                               });
+                              widget.onRatingSelected?.call(_selectedRating);
                             },
                             child: Icon(
-                              index < _selectedRating ? Icons.star : Icons.star_border,
-                              color: AppColors.waring,
+                              index < _selectedRating
+                                  ? Icons.star_rounded
+                                  : Icons.star_border_rounded,
+                              color: index < _selectedRating
+                                  ? AppColors.waring
+                                  : AppColors.c5,
                               size: 30,
                             ),
                           );
